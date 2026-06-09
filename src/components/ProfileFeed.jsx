@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import ArticleCard from './ArticleCard';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getImagePath } from '../utils/paths';
 import { 
   BookOpen, 
   User, 
@@ -283,7 +284,7 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
                   }}
                 >
                   <img 
-                    src={userProfile.avatar || '/images/avatar_user.png'} 
+                    src={userProfile.avatar || getImagePath('/images/avatar_user.png')} 
                     alt={userProfile.name}
                     style={{
                       width: '100%',

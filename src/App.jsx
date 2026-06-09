@@ -12,20 +12,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import IntroAnimation from './components/IntroAnimation';
 import SavedFeed from './components/SavedFeed';
 import ArticleDetailView from './components/ArticleDetailView';
+import { getImagePath } from './utils/paths';
 
 // Helper mock comments to initialize articles beautifully
 const mockComments = [
   {
     id: 'c1',
     author: 'Anna Richards',
-    avatar: '/images/avatar_anna.png',
+    avatar: getImagePath('/images/avatar_anna.png'),
     text: 'This is an outstanding breakdown! The explanation of the agentic loop makes perfect sense.',
     date: '3 days ago'
   },
   {
     id: 'c2',
     author: 'Marc Thompson',
-    avatar: '/images/avatar_marc.png',
+    avatar: getImagePath('/images/avatar_marc.png'),
     text: 'Absolutely! I have been building similar deterministic loops with python. Keep up the great writing.',
     date: '2 days ago'
   }
@@ -48,13 +49,13 @@ function App() {
       id: 'a1',
       name: 'Anna Richards',
       title: 'Data Scientist at Google',
-      avatar: '/images/avatar_anna.png'
+      avatar: getImagePath('/images/avatar_anna.png')
     },
     {
       id: 'm1',
       name: 'Marc Thompson',
       title: 'Senior SWE at Stripe',
-      avatar: '/images/avatar_marc.png'
+      avatar: getImagePath('/images/avatar_marc.png')
     }
   ]);
 
@@ -63,26 +64,26 @@ function App() {
       id: 'f1',
       name: 'Sarah Miller',
       title: 'Technical Writer',
-      avatar: '/images/avatar_anna.png'
+      avatar: getImagePath('/images/avatar_anna.png')
     },
     {
       id: 'f2',
       name: 'Alex Chen',
       title: 'AI Engineer',
-      avatar: '/images/avatar_user.png'
+      avatar: getImagePath('/images/avatar_user.png')
     },
     {
       id: 'f3',
       name: 'Sergey Nes',
       title: 'Staff Developer',
-      avatar: '/images/avatar_marc.png'
+      avatar: getImagePath('/images/avatar_marc.png')
     }
   ]);
 
   // Central User Profile state
   const [userProfile, setUserProfile] = useState({
     name: 'Satyam',
-    avatar: '/images/avatar_user.png',
+    avatar: getImagePath('/images/avatar_user.png'),
     banner: 'linear-gradient(135deg, #0F172A 0%, #1A8917 100%)',
     headline: 'AI/ML Enthusiast | Web Developer | Open Source Learner',
     education: 'QUAD AI School of Technology / Medhavi Skills University',
@@ -797,7 +798,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
     const authorsDb = {
       'Sergey Nes': {
         name: 'Sergey Nes',
-        avatar: '/images/avatar_marc.png',
+        avatar: getImagePath('/images/avatar_marc.png'),
         banner: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
         headline: 'Staff Software Engineer & AI Researcher | Open Source Maintainer',
         education: 'Stanford University',
@@ -812,7 +813,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'Marina Wyss': {
         name: 'Marina Wyss',
-        avatar: '/images/avatar_anna.png',
+        avatar: getImagePath('/images/avatar_anna.png'),
         banner: 'linear-gradient(135deg, #581c87 0%, #a855f7 100%)',
         headline: 'AI Architect at Hugging Face | Tech Writer | ex-Stripe',
         education: 'MIT',
@@ -827,7 +828,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'Marcus Aurelius': {
         name: 'Marcus Aurelius',
-        avatar: '/images/avatar_marc.png',
+        avatar: getImagePath('/images/avatar_marc.png'),
         banner: 'linear-gradient(135deg, #78350f 0%, #d97706 100%)',
         headline: 'Robotics Software Engineer at Boston Dynamics',
         education: 'Carnegie Mellon University',
@@ -842,7 +843,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'Emily Watson': {
         name: 'Emily Watson',
-        avatar: '/images/avatar_anna.png',
+        avatar: getImagePath('/images/avatar_anna.png'),
         banner: 'linear-gradient(135deg, #065f46 0%, #10b981 100%)',
         headline: 'Senior Python Developer & Educator | PSF Fellow',
         education: 'University of Oxford',
@@ -857,7 +858,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'David Miller': {
         name: 'David Miller',
-        avatar: '/images/avatar_marc.png',
+        avatar: getImagePath('/images/avatar_marc.png'),
         banner: 'linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%)',
         headline: 'Full-Stack Team Lead at Vercel | Tech Blogger',
         education: 'UC Berkeley',
@@ -872,7 +873,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'Chloe Adams': {
         name: 'Chloe Adams',
-        avatar: '/images/avatar_anna.png',
+        avatar: getImagePath('/images/avatar_anna.png'),
         banner: 'linear-gradient(135deg, #831843 0%, #db2777 100%)',
         headline: 'Lead Product Designer at Figma | UI/UX Consultant',
         education: 'Rhode Island School of Design',
@@ -887,7 +888,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'Nathan Drake': {
         name: 'Nathan Drake',
-        avatar: '/images/avatar_marc.png',
+        avatar: getImagePath('/images/avatar_marc.png'),
         banner: 'linear-gradient(135deg, #115e59 0%, #14b8a6 100%)',
         headline: 'Data Scientist at Airbnb | Data Visualization Expert',
         education: 'University of Washington',
@@ -902,7 +903,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'Sophie Turner': {
         name: 'Sophie Turner',
-        avatar: '/images/avatar_anna.png',
+        avatar: getImagePath('/images/avatar_anna.png'),
         banner: 'linear-gradient(135deg, #b45309 0%, #f59e0b 100%)',
         headline: 'Financial Analyst at Goldman Sachs | Economics Tutor',
         education: 'London School of Economics',
@@ -917,7 +918,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'Jessica Pearson': {
         name: 'Jessica Pearson',
-        avatar: '/images/avatar_anna.png',
+        avatar: getImagePath('/images/avatar_anna.png'),
         banner: 'linear-gradient(135deg, #1e1b4b 0%, #4f46e5 100%)',
         headline: 'Head of Recruitment at Stripe | Career Coach',
         education: 'Harvard Business School',
@@ -932,7 +933,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'Alex Rivera': {
         name: 'Alex Rivera',
-        avatar: '/images/avatar_marc.png',
+        avatar: getImagePath('/images/avatar_marc.png'),
         banner: 'linear-gradient(135deg, #0f766e 0%, #0d9488 100%)',
         headline: 'Senior Frontend Engineer at Meta | React Core Enthusiast',
         education: 'Georgia Tech',
@@ -947,7 +948,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       },
       'Vikram Singh': {
         name: 'Vikram Singh',
-        avatar: '/images/avatar_marc.png',
+        avatar: getImagePath('/images/avatar_marc.png'),
         banner: 'linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%)',
         headline: 'Algorithms Professor & Competitive Programmer',
         education: 'IIT Delhi',
@@ -964,7 +965,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
     
     return authorsDb[authorName] || {
       name: authorName,
-      avatar: '/images/avatar_user.png',
+      avatar: getImagePath('/images/avatar_user.png'),
       banner: defaultBanner,
       headline: 'Student & Technology Creator | Scholr Member',
       education: 'Scholr Academy of Tech',
