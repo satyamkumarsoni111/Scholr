@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getImagePath } from '../utils/paths';
 
 // Avatars of diverse students around the world (generated in prior step)
 const STUDENT_AVATARS = [
-  { id: 1, src: getImagePath('/images/intro_student_1.png'), initialX: -260, initialY: -160, size: 75 },
-  { id: 2, src: getImagePath('/images/intro_student_2.png'), initialX: 280, initialY: -130, size: 80 },
-  { id: 3, src: getImagePath('/images/intro_student_3.png'), initialX: -240, initialY: 150, size: 70 },
-  { id: 4, src: getImagePath('/images/intro_student_4.png'), initialX: 250, initialY: 170, size: 75 },
-  { id: 5, src: getImagePath('/images/intro_student_5.png'), initialX: 0, initialY: -220, size: 85 }
+  { id: 1, src: '/images/intro_student_1.png', initialX: -260, initialY: -160, size: 75 },
+  { id: 2, src: '/images/intro_student_2.png', initialX: 280, initialY: -130, size: 80 },
+  { id: 3, src: '/images/intro_student_3.png', initialX: -240, initialY: 150, size: 70 },
+  { id: 4, src: '/images/intro_student_4.png', initialX: 250, initialY: 170, size: 75 },
+  { id: 5, src: '/images/intro_student_5.png', initialX: 0, initialY: -220, size: 85 }
 ];
 
 export default function IntroAnimation({ onComplete }) {
