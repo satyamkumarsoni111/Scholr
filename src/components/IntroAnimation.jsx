@@ -142,7 +142,7 @@ export default function IntroAnimation({ onComplete }) {
                       }}
                       onError={(e) => {
                         // Fallback in case of asset path issues
-                        e.target.src = getImagePath('/images/avatar_user.png');
+                        e.target.src = '/images/avatar_user.png';
                       }}
                     />
                   </motion.div>

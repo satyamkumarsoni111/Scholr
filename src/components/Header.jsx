@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Search, PenSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getImagePath, getBasePath } from '../utils/paths';
 
 export default function Header({ activeTab, setActiveTab, userProfile, searchQuery, setSearchQuery }) {
   const [searchFocused, setSearchFocused] = useState(false);
@@ -13,7 +12,7 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
     <header className="header">
       <div className="header-left">
         <motion.a 
-          href={getBasePath()} 
+          href="/" 
           className="logo-text"
           onClick={(e) => {
             e.preventDefault();
@@ -24,7 +23,7 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
           style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
         >
           <img 
-            src={getImagePath('/images/logo.png')} 
+            src="/images/logo.png" 
             alt="Scholr Logo" 
             style={{ height: '32px', width: 'auto', display: 'block' }} 
           />
@@ -78,7 +77,7 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
             whileTap={{ scale: 0.95 }}
           >
             <img 
-              src={userProfile ? userProfile.avatar : getImagePath('/images/avatar_user.png')} 
+              src={userProfile ? userProfile.avatar : "/images/avatar_user.png"} 
               alt="User Avatar" 
               className="user-avatar"
             />
@@ -110,7 +109,8 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <img 
-                      src={userProfile.avatar || getImagePath('/images/avatar_user.png')} 
+                    src={userProfile.avatar || "/images/avatar_user.png"} 
+                    alt="Profile"
                     style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary-green-light)' }}
                   />
                   

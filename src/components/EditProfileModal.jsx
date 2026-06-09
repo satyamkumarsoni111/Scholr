@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { X, Camera, Save, GraduationCap, Cpu, Link, AlignLeft, Info } from 'lucide-react';
-import { getImagePath } from '../utils/paths';
 
 export default function EditProfileModal({ isOpen, onClose, userProfile, onSave }) {
-  const [avatar, setAvatar] = useState(userProfile.avatar || getImagePath('/images/avatar_user.png'));
+  const [avatar, setAvatar] = useState(userProfile.avatar || '/images/avatar_user.png');
   const [name, setName] = useState(userProfile.name || '');
   const [headline, setHeadline] = useState(userProfile.headline || '');
   const [about, setAbout] = useState(userProfile.about || '');

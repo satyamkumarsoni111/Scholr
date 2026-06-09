@@ -1,5 +1,5 @@
 // Get the correct base URL for GitHub Pages
-export const getBasePath = () => {
+const getBasePath = () => {
   return import.meta.env.BASE_URL || '/';
 };
 
