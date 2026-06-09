@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, MessageCircle, Bookmark, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CommentsSection from './CommentsSection';
+import { getImagePath } from '../utils/paths';
 
 // High-fidelity custom SVG for the "Clap" icon (identical to the Medium style)
 const ClapIcon = ({ active }) => (
@@ -131,11 +132,11 @@ export default function ArticleDetailView({ article, onBack, toggleSave, isSaved
         
         <div className="detail-author-row">
           <img 
-            src={article.author === 'Satyam' || isOwnArticle ? "/images/avatar_user.png" : `/images/avatar_${article.author.toLowerCase().split(' ')[0]}.png`} 
+            src={article.author === 'Satyam' || isOwnArticle ? getImagePath('/images/avatar_user.png') : getImagePath(`/images/avatar_${article.author.toLowerCase().split(' ')[0]}.png`)} 
             alt={article.author}
             className="detail-author-avatar"
             onError={(e) => {
-              e.target.src = "/images/avatar_user.png";
+              e.target.src = getImagePath('/images/avatar_user.png');
             }}
           />
           <div className="detail-author-info">

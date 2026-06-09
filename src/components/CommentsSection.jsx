@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { getImagePath } from '../utils/paths';
 
 export default function CommentsSection({ articleId, commentsList = [], onAddComment }) {
   const [commentText, setCommentText] = useState('');
@@ -50,7 +51,7 @@ export default function CommentsSection({ articleId, commentsList = [], onAddCom
             transition={{ duration: 0.2 }}
           >
             <img 
-              src={comment.avatar || "/images/avatar_user.png"} 
+              src={comment.avatar || getImagePath("/images/avatar_user.png")} 
               alt={comment.author} 
               className="comment-avatar"
             />
