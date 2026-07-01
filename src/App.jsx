@@ -272,29 +272,6 @@ function App() {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [viewedProfileAuthor, setViewedProfileAuthor] = useState(null);
 
-  // Synchronize route paths to state
-  useEffect(() => {
-    const path = location.pathname;
-    if (path.startsWith('/story/')) {
-      const id = path.split('/').pop();
-      const allArticles = [...homeArticles, ...profileArticles, ...savedArticles];
-      const found = allArticles.find(a => String(a.id) === String(id));
-      if (found) {
-        setSelectedArticle(found);
-      } else {
-        setSelectedArticle({ id });
-      }
-    } else {
-      setSelectedArticle(null);
-      if (path === '/profile') setActiveTab('Profile');
-      else if (path === '/saved') setActiveTab('Saved');
-      else if (path === '/stats') setActiveTab('Stats');
-      else if (path === '/following') setActiveTab('Following');
-      else if (path === '/followers') setActiveTab('Followers');
-      else if (path === '/write') setActiveTab('Write');
-      else if (path === '/') setActiveTab('Home');
-    }
-  }, [location.pathname, homeArticles, profileArticles, savedArticles]);
 
   const [followingCreators, setFollowingCreators] = useState(() => {
     const active = getActiveUser();
@@ -983,6 +960,30 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       }
     }
   }, [isLoggedIn, userProfile, profileArticles, savedArticles, followingCreators, followers]);
+
+  // Synchronize route paths to state
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.startsWith('/story/')) {
+      const id = path.split('/').pop();
+      const allArticles = [...homeArticles, ...profileArticles, ...savedArticles];
+      const found = allArticles.find(a => String(a.id) === String(id));
+      if (found) {
+        setSelectedArticle(found);
+      } else {
+        setSelectedArticle({ id });
+      }
+    } else {
+      setSelectedArticle(null);
+      if (path === '/profile') setActiveTab('Profile');
+      else if (path === '/saved') setActiveTab('Saved');
+      else if (path === '/stats') setActiveTab('Stats');
+      else if (path === '/following') setActiveTab('Following');
+      else if (path === '/followers') setActiveTab('Followers');
+      else if (path === '/write') setActiveTab('Write');
+      else if (path === '/') setActiveTab('Home');
+    }
+  }, [location.pathname, homeArticles, profileArticles, savedArticles]);
 
   const toggleSaveArticle = (article) => {
     setSavedArticles(prev => {
