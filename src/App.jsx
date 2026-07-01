@@ -1349,11 +1349,13 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
     }
   };
 
-  const gridColumns = (activeTab === 'Home' && !selectedArticle) 
-    ? '1fr 340px' 
-    : (activeTab === 'Write')
-      ? '1fr'
-      : '240px 1fr';
+  const gridColumns = selectedArticle
+    ? '1fr'
+    : (activeTab === 'Home')
+      ? '1fr 340px'
+      : (activeTab === 'Write')
+        ? '1fr'
+        : '240px 1fr';
 
   return (
     <>
@@ -1395,7 +1397,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
           />
           
           <main className="main-content" style={{ gridTemplateColumns: gridColumns }}>
-            {(activeTab !== 'Home' || selectedArticle) && activeTab !== 'Write' && (
+            {!selectedArticle && activeTab !== 'Write' && activeTab !== 'Home' && (
               <SidebarLeft 
                 activeTab={activeTab} 
                 setActiveTab={(tab) => {
