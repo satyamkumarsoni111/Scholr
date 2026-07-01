@@ -68,6 +68,13 @@ export default function ArticleDetailView({ article, onBack, toggleSave, isSaved
 
     if (Array.isArray(article.content)) {
       return article.content.map((paragraph, index) => {
+        if (index === 0 && paragraph.includes('Photo by')) {
+          return (
+            <div key={index} className="detail-image-caption">
+              {paragraph}
+            </div>
+          );
+        }
         if (paragraph.startsWith('## ')) {
           return <h2 key={index}>{paragraph.replace('## ', '')}</h2>;
         }
@@ -81,6 +88,23 @@ export default function ArticleDetailView({ article, onBack, toggleSave, isSaved
             <pre key={index}>
               <code>{codeText}</code>
             </pre>
+          );
+        }
+        if (paragraph.startsWith('==')) {
+          // Highlighted paragraph with comment bubble
+          const text = paragraph.replace(/^==/, '');
+          return (
+            <div key={index} className="detail-highlighted-paragraph-container">
+              <p className="detail-highlighted-paragraph">
+                {parseInlineCode(text)}
+              </p>
+              <div className="paragraph-comment-bubble" onClick={() => setShowComments(true)}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>3</span>
+              </div>
+            </div>
           );
         }
         // Paragraph with potential inline code parsing
@@ -180,31 +204,7 @@ export default function ArticleDetailView({ article, onBack, toggleSave, isSaved
         </div>
       )}
 
-      {/* TL;DR Highlight Box */}
-      <div className="article-tldr-box" style={{
-        backgroundColor: 'rgba(26, 137, 23, 0.05)',
-        borderLeft: '4px solid var(--primary-green)',
-        borderRadius: '8px',
-        padding: '16px 20px',
-        marginBottom: '32px'
-      }}>
-        <div className="tldr-title" style={{
-          fontSize: '14px',
-          fontWeight: '700',
-          color: 'var(--primary-green)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-          marginBottom: '6px'
-        }}>⚡ TL;DR Summary</div>
-        <p className="tldr-text" style={{
-          fontSize: '15px',
-          lineHeight: '1.6',
-          color: '#334155',
-          margin: 0
-        }}>
-          {article.excerpt || "A quick overview highlighting key findings, academic tips, and core takeaways from this student contribution."}
-        </p>
-      </div>
+
 
       {/* Article Body Content */}
       <div className="article-detail-body">

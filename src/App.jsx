@@ -365,24 +365,24 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
   const [homeArticles, setHomeArticles] = useState([
     {
       id: 'h1',
-      publication: 'Level Up Coding',
-      author: 'Sergey Nes',
-      date: 'May 4',
-      title: 'Building an AI Agent from Scratch: No Magic, Just a Deterministic Loop',
-      excerpt: 'I was using Claude, Codex, Cursor, Gemini, Copilot, or Junie every day, but I still could not point to the exact line where “chatbot” ends and “AI Agent” begins. So, I built one to understand it inside out.',
-      initialClaps: 1400,
-      comments: 2,
+      publication: 'The Daily Draft',
+      author: 'Clive Thompson',
+      date: 'May 26',
+      title: 'How To Spot Someone Secretly Writing With AI',
+      excerpt: 'I’ve spent enough time online to notice people becoming confident about their ability to spot AI writing on sight, which probably explains why every few days somebody publishes a thread exposing fraudsters.',
+      initialClaps: 1820,
+      comments: 3,
       commentsList: [...mockComments],
-      initialRepeats: 20,
-      image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500&auto=format&fit=crop',
-      tags: ['For you', 'Featured', 'AI/ML'],
+      initialRepeats: 25,
+      image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&auto=format&fit=crop',
+      tags: ['For you', 'Featured', 'Writing'],
       content: [
-        "I was using Claude, Codex, Cursor, Gemini, Copilot, or Junie every day, but I still could not point to the exact line where “chatbot” ends and “AI Agent” begins. So, I built one to understand it inside out.",
-        "An AI Agent is, at its heart, a deterministic loop that executes steps in a cycle: Perceive, Plan, Act, and Learn. There is no magic behind it, only structured logic powered by Large Language Models.",
-        "## The Core Agent Loop",
-        "Let's break down the core agent loop in python code:",
-        "```python\nclass Agent:\n    def __init__(self, model, tools):\n        self.model = model\n        self.tools = tools\n        self.memory = []\n\n    def run(self, task):\n        print(f'Starting task: {task}')\n        while True:\n            # 1. Perceive & Plan\n            prompt = self.build_prompt(task)\n            response = self.model.generate(prompt)\n            action = self.parse_action(response)\n            \n            if action['type'] == 'finish':\n                return action['output']\n                \n            # 2. Act\n            result = self.execute_tool(action['name'], action['args'])\n            self.memory.append({'action': action, 'result': result})\n```",
-        "With this simple loop, the agent is able to execute multi-step reasoning, run tools to interact with the external environment, and self-correct when errors occur. By understanding this deterministic loop, developers can build agents tailored to their own workflows without relying on heavy frameworks."
+        "A man typing on a laptop. Photo by Ono Kosuki from Pexels.",
+        "I’ve spent enough time online to notice people becoming confident about their ability to spot AI writing on sight, which probably explains why every few days somebody publishes a thread exposing fraudsters. One person focuses on punctuation. Another gets suspicious of articles that sound too structured. And lately, I’ve seen more people treating completely normal literary techniques like evidence somebody secretly opened ChatGPT halfway through writing.",
+        "==Earlier this morning, I read one of those articles out of curiosity. The examples were all over the place. One section pointed to similes as an obvious AI tell. Another warned readers to watch out for metaphors and descriptive qualifiers. Which would’ve been surprising news to basically every novelist, essayist, and columnist from the last hundred years.",
+        "Then things got even more ridiculous.",
+        "The author started breaking down phrases like “slightly confusing” or “remarkably difficult” as though qualifying descriptors were invented by OpenAI. It was a bizarre display of revisionist history—as if clear, structured, or vivid writing was a machine-only domain, and human writers should only produce fragmented, unstructured prose to prove their humanity.",
+        "In reality, the search for AI tells is becoming a form of online paranoia. Instead of evaluating writing on its merits, substance, or factual accuracy, we are teaching people to fear good style."
       ]
     },
     {

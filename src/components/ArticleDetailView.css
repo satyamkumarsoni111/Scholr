@@ -115,9 +115,10 @@
 }
 
 .article-detail-body {
-  font-size: 17px;
-  line-height: 1.8;
-  color: #2d3748;
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 20px;
+  line-height: 1.68;
+  color: #292929;
   margin-bottom: 32px;
 }
 
@@ -267,4 +268,67 @@
   white-space: nowrap;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   z-index: 101;
+}
+
+/* Custom design from screenshot asset */
+.detail-image-caption {
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+  margin-top: -16px;
+  margin-bottom: 36px;
+  font-style: italic;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.detail-highlighted-paragraph-container {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.detail-highlighted-paragraph {
+  background-color: rgba(165, 243, 204, 0.45); /* light green selection highlight matching the asset screenshot */
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 0;
+  display: inline;
+  line-height: 1.68;
+}
+
+.paragraph-comment-bubble {
+  position: absolute;
+  left: calc(100% + 24px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.paragraph-comment-bubble svg {
+  color: #64748b;
+  transition: transform 0.2s;
+}
+
+.paragraph-comment-bubble:hover {
+  color: #0f172a;
+}
+
+.paragraph-comment-bubble:hover svg {
+  transform: scale(1.1);
+}
+
+@media (max-width: 800px) {
+  .paragraph-comment-bubble {
+    position: static;
+    transform: none;
+    margin-top: 8px;
+    justify-content: flex-end;
+  }
 }
