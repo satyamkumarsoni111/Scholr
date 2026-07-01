@@ -25,7 +25,7 @@ const seedDefaultUsers = () => {
       password: 'password123',
       stream: '🎓 B.Tech / B.E.',
       avatar: getImagePath('/images/avatar_user.png'),
-      banner: 'linear-gradient(135deg, #0F172A 0%, #1A8917 100%)',
+      banner: getImagePath('/images/cover_user.png'),
       headline: 'AI/ML Enthusiast | Web Developer | Open Source Learner',
       education: 'QUAD AI School of Technology / Medhavi Skills University',
       branch: 'Integrated B.Tech in Computer Science (AI/ML)',
@@ -41,7 +41,7 @@ const seedDefaultUsers = () => {
 He is passionate about Robotics, AI/ML, and building real-world tech projects. He enjoy participating in hackathons, solving practical problems, and learning by building innovative solutions under real challenges.
 Over the past few months, He has worked on robotics projects, PCB design, frontend development, and AI-based ideas while actively participating in multiple hackathons .
 
-🔹 Technical Skills & Tools:
+Technical Skills & Tools:
  • C++, Python
  • HTML, CSS, JavaScript, React
  • Git & GitHub
@@ -51,13 +51,13 @@ Over the past few months, He has worked on robotics projects, PCB design, fronte
  • AI/ML Basics
  • Robotics
 
-🔹 Areas of Interest:
+Areas of Interest:
  • Robotics & Automation
  • Artificial Intelligence
  • Frontend Development
  • Participating in Hackathon
 
-🔹 Achievements & Highlights:
+Achievements & Highlights:
  • Finalist at hackathon events organized by BITS Pilani
  • Winner at competitions hosted by Indian Institute of Technology Dhanbad
  • Winner at tech competitions organized by Birsa Institute of Technology Sindri
@@ -320,7 +320,7 @@ function App() {
       name: 'Satyam',
       email: 'satyam@scholr.com',
       avatar: getImagePath('/images/avatar_user.png'),
-      banner: 'linear-gradient(135deg, #0F172A 0%, #1A8917 100%)',
+      banner: getImagePath('/images/cover_user.png'),
       headline: 'AI/ML Enthusiast | Web Developer | Open Source Learner',
       education: 'QUAD AI School of Technology / Medhavi Skills University',
       branch: 'Integrated B.Tech in Computer Science (AI/ML)',
@@ -336,7 +336,7 @@ function App() {
 He is passionate about Robotics, AI/ML, and building real-world tech projects. He enjoy participating in hackathons, solving practical problems, and learning by building innovative solutions under real challenges.
 Over the past few months, He has worked on robotics projects, PCB design, frontend development, and AI-based ideas while actively participating in multiple hackathons .
 
-🔹 Technical Skills & Tools:
+Technical Skills & Tools:
  • C++, Python
  • HTML, CSS, JavaScript, React
  • Git & GitHub
@@ -346,13 +346,13 @@ Over the past few months, He has worked on robotics projects, PCB design, fronte
  • AI/ML Basics
  • Robotics
 
-🔹 Areas of Interest:
+Areas of Interest:
  • Robotics & Automation
  • Artificial Intelligence
  • Frontend Development
  • Participating in Hackathon
 
-🔹 Achievements & Highlights:
+Achievements & Highlights:
  • Finalist at hackathon events organized by BITS Pilani
  • Winner at competitions hosted by Indian Institute of Technology Dhanbad
  • Winner at tech competitions organized by Birsa Institute of Technology Sindri
@@ -1296,6 +1296,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
             onTitleClick={(art) => setSelectedArticle(art)}
             toggleSave={toggleSaveArticle}
             setActiveTab={setActiveTab}
+            onAuthorClick={handleAuthorClick}
           />
         );
       case 'Profile':

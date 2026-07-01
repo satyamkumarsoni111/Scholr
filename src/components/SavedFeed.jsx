@@ -3,7 +3,7 @@ import { Bookmark, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import './SavedFeed.css';
 
-export default function SavedFeed({ savedArticles, onTitleClick, toggleSave, setActiveTab }) {
+export default function SavedFeed({ savedArticles, onTitleClick, toggleSave, setActiveTab, onAuthorClick }) {
   return (
     <div className="saved-container">
       
@@ -34,6 +34,7 @@ export default function SavedFeed({ savedArticles, onTitleClick, toggleSave, set
             isSaved={true}
             onSaveClick={() => toggleSave(article)}
             onTitleClick={() => onTitleClick(article)}
+            onAuthorClick={onAuthorClick}
           />
         ))}
 

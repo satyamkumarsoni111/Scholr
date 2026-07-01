@@ -107,7 +107,7 @@ export default function ArticleCard({ article, isSaved, onSaveClick, onTitleClic
             className="article-title"
             onClick={(e) => {
               e.preventDefault();
-              if (onTitleClick) onTitleClick();
+              if (onTitleClick) onTitleClick(article);
             }}
           >
             {article.title}

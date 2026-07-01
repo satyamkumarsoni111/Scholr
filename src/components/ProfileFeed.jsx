@@ -28,7 +28,19 @@ const LinkedinIcon = ({ size = 18 }) => (
   </svg>
 );
 
-export default function ProfileFeed({ articles, userProfile, onSaveProfile, savedArticles, toggleSave, onTitleClick, onAddComment, currentUser }) {
+const getGithubUrl = (id) => {
+  if (!id) return '#';
+  if (id.startsWith('http://') || id.startsWith('https://')) return id;
+  return `https://github.com/${id}`;
+};
+
+const getLinkedinUrl = (id) => {
+  if (!id) return '#';
+  if (id.startsWith('http://') || id.startsWith('https://')) return id;
+  return `https://linkedin.com/in/${id}`;
+};
+
+export default function ProfileFeed({ articles, userProfile, onSaveProfile, savedArticles, toggleSave, onTitleClick, onAddComment, currentUser, onAuthorClick }) {
   const [profileTab, setProfileTab] = useState('My Articles');
   const [isHoveringBanner, setIsHoveringBanner] = useState(false);
   const [isHoveringAvatar, setIsHoveringAvatar] = useState(false);
@@ -127,6 +139,7 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, save
                   onSaveClick={() => toggleSave(article)}
                   onTitleClick={() => onTitleClick(article)}
                   onAddComment={onAddComment}
+                  onAuthorClick={onAuthorClick}
                 />
               ))}
               {articles.length === 0 && (
@@ -269,21 +282,27 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, save
                           </span>
                           <div className="profile-connections-row">
                             {userProfile.github && (
-                              <div 
-                                className="profile-connection-icon github"
+                              <a 
+                                href={getGithubUrl(userProfile.github)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="profile-connection-icon github clickable"
                                 title="GitHub Profile"
                               >
                                 <GithubIcon size={18} />
-                              </div>
+                              </a>
                             )}
                             
                             {userProfile.linkedin && (
-                              <div 
-                                className="profile-connection-icon linkedin"
+                              <a 
+                                href={getLinkedinUrl(userProfile.linkedin)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="profile-connection-icon linkedin clickable"
                                 title="LinkedIn Profile"
                               >
                                 <LinkedinIcon size={18} />
-                              </div>
+                              </a>
                             )}
                           </div>
                         </>

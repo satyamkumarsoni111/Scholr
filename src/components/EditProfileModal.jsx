@@ -29,11 +29,15 @@ export default function EditProfileModal({ isOpen, onClose, userProfile, onSave 
       return;
     }
 
+    // Strip emojis from the about section to maintain a professional look
+    const emojiRegex = /[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{1F000}-\u{1F9FF}]/gu;
+    const sanitizedAbout = about.replace(emojiRegex, '').trim();
+
     onSave({
       avatar,
       name: name.trim(),
       headline: headline.trim(),
-      about: about.trim(),
+      about: sanitizedAbout,
       skills: skills.trim(),
       education: education.trim(),
       branch: branch.trim(),
