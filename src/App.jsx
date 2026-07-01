@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import SidebarLeft from './components/SidebarLeft';
 import HomeFeed from './components/HomeFeed';
@@ -246,6 +247,9 @@ const mockComments = [
 ];
 
 function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return !!localStorage.getItem('currentUser');
   });
@@ -267,6 +271,30 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [viewedProfileAuthor, setViewedProfileAuthor] = useState(null);
+
+  // Synchronize route paths to state
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.startsWith('/story/')) {
+      const id = path.split('/').pop();
+      const allArticles = [...homeArticles, ...profileArticles, ...savedArticles];
+      const found = allArticles.find(a => String(a.id) === String(id));
+      if (found) {
+        setSelectedArticle(found);
+      } else {
+        setSelectedArticle({ id });
+      }
+    } else {
+      setSelectedArticle(null);
+      if (path === '/profile') setActiveTab('Profile');
+      else if (path === '/saved') setActiveTab('Saved');
+      else if (path === '/stats') setActiveTab('Stats');
+      else if (path === '/following') setActiveTab('Following');
+      else if (path === '/followers') setActiveTab('Followers');
+      else if (path === '/write') setActiveTab('Write');
+      else if (path === '/') setActiveTab('Home');
+    }
+  }, [location.pathname, homeArticles, profileArticles, savedArticles]);
 
   const [followingCreators, setFollowingCreators] = useState(() => {
     const active = getActiveUser();
@@ -1032,7 +1060,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
       ...prev
     ]);
 
-    setActiveTab('Home');
+    navigate('/');
   };
 
   const handleSaveProfile = (updatedProfile) => {
@@ -1047,7 +1075,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
     setIsLoggedIn(false);
-    setActiveTab('Home');
+    navigate('/');
   };
 
   // Maps author name dynamically so edits propagate immediately everywhere
@@ -1066,7 +1094,19 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
   const handleAuthorClick = (authorName) => {
     setSelectedArticle(null);
     setViewedProfileAuthor(authorName);
-    setActiveTab('Profile');
+    navigate('/profile');
+  };
+
+  const handleTabChange = (tab) => {
+    setViewedProfileAuthor(null);
+    setSelectedArticle(null);
+    if (tab === 'Home') navigate('/');
+    else if (tab === 'Profile') navigate('/profile');
+    else if (tab === 'Saved') navigate('/saved');
+    else if (tab === 'Stats') navigate('/stats');
+    else if (tab === 'Following') navigate('/following');
+    else if (tab === 'Followers') navigate('/followers');
+    else if (tab === 'Write') navigate('/write');
   };
 
   // Helper to resolve profile database details for external creators
@@ -1259,23 +1299,9 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
   };
 
   const renderFeed = () => {
-    if (selectedArticle) {
-      return (
-        <ArticleDetailView 
-          article={selectedArticle}
-          onBack={() => setSelectedArticle(null)}
-          toggleSave={toggleSaveArticle}
-          isSaved={savedArticles.some(a => a.id === selectedArticle.id)}
-          onAddComment={handleAddComment}
-          currentUser={userProfile.name}
-          onAuthorClick={handleAuthorClick}
-        />
-      );
-    }
-
-    switch (activeTab) {
-      case 'Home':
-        return (
+    return (
+      <Routes>
+        <Route path="/" element={
           <HomeFeed 
             articles={mapUserAuthorName(homeArticles)} 
             selectedTopic={selectedTopic} 
@@ -1284,69 +1310,50 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
             searchQuery={searchQuery}
             savedArticles={savedArticles}
             toggleSave={toggleSaveArticle}
-            onTitleClick={(art) => setSelectedArticle(art)}
+            onTitleClick={(art) => navigate(`/story/${art.id}`)}
             onAddComment={handleAddComment}
             onAuthorClick={handleAuthorClick}
           />
-        );
-      case 'Saved':
-        return (
-          <SavedFeed 
-            savedArticles={mapUserAuthorName(savedArticles)}
-            onTitleClick={(art) => setSelectedArticle(art)}
+        } />
+        <Route path="/story/:id" element={
+          <ArticleDetailView 
+            homeArticles={homeArticles}
+            profileArticles={profileArticles}
+            savedArticles={savedArticles}
             toggleSave={toggleSaveArticle}
-            setActiveTab={setActiveTab}
             onAuthorClick={handleAuthorClick}
+            currentUser={userProfile.name}
           />
-        );
-      case 'Profile':
-        const profileUser = viewedProfileAuthor 
-          ? getAuthorProfile(viewedProfileAuthor) 
-          : userProfile;
-        
-        // Filter articles belonging strictly to this user
-        const profileFeedArticles = viewedProfileAuthor 
-          ? homeArticles.filter(a => a.author === viewedProfileAuthor) 
-          : profileArticles;
-          
-        return (
+        } />
+        <Route path="/profile" element={
           <ProfileFeed 
-            articles={mapUserAuthorName(profileFeedArticles)} 
-            userProfile={profileUser} 
+            articles={mapUserAuthorName(viewedProfileAuthor ? homeArticles.filter(a => a.author === viewedProfileAuthor) : profileArticles)} 
+            userProfile={viewedProfileAuthor ? getAuthorProfile(viewedProfileAuthor) : userProfile} 
             onSaveProfile={handleSaveProfile}
             onEditProfileClick={() => setIsEditProfileOpen(true)}
             savedArticles={savedArticles}
             toggleSave={toggleSaveArticle}
-            onTitleClick={(art) => setSelectedArticle(art)}
+            onTitleClick={(art) => navigate(`/story/${art.id}`)}
             onAddComment={handleAddComment}
             currentUser={userProfile.name}
             onAuthorClick={handleAuthorClick}
           />
-        );
-      case 'Stats':
-        return <StatsView />;
-      case 'Following':
-        return <NetworkView type="Following" users={followingCreators} onUnfollow={unfollowCreator} />;
-      case 'Followers':
-        return <NetworkView type="Followers" users={followers} />;
-      case 'Write':
-        return <WriteView onPublish={handlePublishArticle} />;
-      default:
-        return (
-          <HomeFeed 
-            articles={mapUserAuthorName(homeArticles)} 
-            selectedTopic={selectedTopic} 
-            setSelectedTopic={setSelectedTopic}
-            currentUser={userProfile.name}
-            searchQuery={searchQuery}
-            savedArticles={savedArticles}
+        } />
+        <Route path="/saved" element={
+          <SavedFeed 
+            savedArticles={mapUserAuthorName(savedArticles)}
+            onTitleClick={(art) => navigate(`/story/${art.id}`)}
             toggleSave={toggleSaveArticle}
-            onTitleClick={(art) => setSelectedArticle(art)}
-            onAddComment={handleAddComment}
+            setActiveTab={handleTabChange}
             onAuthorClick={handleAuthorClick}
           />
-        );
-    }
+        } />
+        <Route path="/stats" element={<StatsView />} />
+        <Route path="/following" element={<NetworkView type="Following" users={followingCreators} onUnfollow={unfollowCreator} />} />
+        <Route path="/followers" element={<NetworkView type="Followers" users={followers} />} />
+        <Route path="/write" element={<WriteView onPublish={handlePublishArticle} />} />
+      </Routes>
+    );
   };
 
   const gridColumns = selectedArticle
@@ -1385,11 +1392,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
         >
           <Header 
             activeTab={activeTab} 
-            setActiveTab={(tab) => {
-              setSelectedArticle(null);
-              setViewedProfileAuthor(null);
-              setActiveTab(tab);
-            }} 
+            setActiveTab={handleTabChange} 
             userProfile={userProfile}
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -1400,11 +1403,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
             {!selectedArticle && activeTab !== 'Write' && activeTab !== 'Home' && (
               <SidebarLeft 
                 activeTab={activeTab} 
-                setActiveTab={(tab) => {
-                  setSelectedArticle(null);
-                  setViewedProfileAuthor(null);
-                  setActiveTab(tab);
-                }} 
+                setActiveTab={handleTabChange} 
                 onEditProfileClick={() => setIsEditProfileOpen(true)}
                 followingCreatorsCount={followingCreators.length}
                 followersCount={followers.length}
@@ -1415,7 +1414,7 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
             <div style={{ flex: 1, minWidth: 0 }}>
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeTab + (selectedArticle ? `-detail-${selectedArticle.id}` : '')}
+                  key={location.pathname}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
