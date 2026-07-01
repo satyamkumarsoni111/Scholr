@@ -1,0 +1,104 @@
+.network-container {
+  max-width: 1000px;
+  padding: 36px 40px;
+}
+
+.network-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 24px;
+}
+
+.network-table-header {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1fr;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.network-header-center {
+  text-align: center;
+}
+
+.network-users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.network-user-row {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1fr;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #fafafa;
+}
+
+.network-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 8px;
+}
+
+.network-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.network-user-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.network-user-bio {
+  font-size: 14px;
+  color: #475569;
+}
+
+.network-action-cell {
+  display: flex;
+  justify-content: center;
+}
+
+.network-unfollow-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ef4444;
+  background: none;
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.network-follow-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--primary-green);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.network-empty-message {
+  text-align: center;
+  color: #9ca3af;
+  margin-top: 20px;
+}

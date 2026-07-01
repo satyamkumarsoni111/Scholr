@@ -1,32 +1,29 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, PenSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getImagePath, getBasePath } from '../utils/paths';
+import './Header.css';
 
-export default function Header({ activeTab, setActiveTab, userProfile, searchQuery, setSearchQuery }) {
-  const [searchFocused, setSearchFocused] = useState(false);
+export default function Header({ activeTab, setActiveTab, userProfile, searchQuery, setSearchQuery, onLogout }) {
   const [isHoveringProfile, setIsHoveringProfile] = useState(false);
-
-  const isHomeView = activeTab === 'Home';
 
   return (
     <header className="header">
       <div className="header-left">
         <motion.a 
           href={getBasePath()} 
-          className="logo-text"
+          className="logo-text header-logo-wrapper"
           onClick={(e) => {
             e.preventDefault();
             setActiveTab('Home');
           }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
         >
           <img 
             src={getImagePath('/images/logo.png')} 
             alt="Scholr Logo" 
-            style={{ height: '32px', width: 'auto', display: 'block' }} 
+            className="header-logo-img" 
           />
           <span>Scholr</span>
         </motion.a>
@@ -44,8 +41,6 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
                 setActiveTab('Home');
               }
             }}
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
           />
         </div>
       </div>
@@ -53,13 +48,12 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
       <div className="header-right">
         <motion.a 
           href="#write" 
-          className="write-link"
+          className="write-link header-write-link-inner"
           onClick={(e) => {
             e.preventDefault();
             setActiveTab('Write');
           }}
           whileHover={{ color: '#111111' }}
-          style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
         >
           <PenSquare size={16} strokeWidth={2} />
           <span>Write</span>
@@ -67,7 +61,7 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
 
         {/* When user clicks on rightmost profile icon, navigate to Profile view */}
         <div 
-          style={{ position: 'relative' }} 
+          className="header-profile-menu-container"
           onMouseEnter={() => setIsHoveringProfile(true)}
           onMouseLeave={() => setIsHoveringProfile(false)}
         >
@@ -78,7 +72,7 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
             whileTap={{ scale: 0.95 }}
           >
             <img 
-              src={userProfile ? userProfile.avatar : getImagePath('/images/avatar_user.png')} 
+              src={(userProfile && userProfile.avatar) ? userProfile.avatar : getImagePath('/images/avatar_user.png')} 
               alt="User Avatar" 
               className="user-avatar"
             />
@@ -91,67 +85,48 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  marginTop: '12px',
-                  width: '300px',
-                  backgroundColor: '#ffffff',
-                  borderRadius: '16px',
-                  padding: '24px',
-                  boxShadow: '0 10px 25px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.05)',
-                  zIndex: 100,
-                  cursor: 'default',
-                  border: '1px solid #f1f5f9',
-                  textAlign: 'left'
-                }}
+                className="header-profile-dropdown"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div className="header-profile-dropdown-content">
                   <img 
-                      src={userProfile.avatar || getImagePath('/images/avatar_user.png')} 
-                    style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary-green-light)' }}
+                    src={userProfile.avatar || getImagePath('/images/avatar_user.png')} 
+                    className="header-profile-dropdown-avatar"
+                    alt="Dropdown Avatar"
                   />
                   
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                      <span style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a' }}>
+                  <div className="header-profile-dropdown-info">
+                    <div className="header-profile-dropdown-name-row">
+                      <span className="header-profile-dropdown-name">
                         {userProfile.name}
                       </span>
-                      <span style={{ fontSize: '13px', color: '#64748b' }}>he/him</span>
+                      <span className="header-profile-dropdown-pronouns">he/him</span>
                     </div>
                     {userProfile.headline && (
-                      <div style={{ 
-                        fontSize: '13px', 
-                        color: 'var(--primary-green)', 
-                        fontWeight: '600', 
-                        lineHeight: '1.4' 
-                      }}>
+                      <div className="header-profile-dropdown-headline">
                         {userProfile.headline}
                       </div>
                     )}
-                    <div style={{ fontSize: '13px', color: '#64748b', fontWeight: '500' }}>
+                    <div className="header-profile-dropdown-followers">
                       1 follower
                     </div>
                   </div>
                   
                   {userProfile.about && (
-                    <div style={{ 
-                      fontSize: '13px', 
-                      color: '#475569', 
-                      lineHeight: '1.5', 
-                      whiteSpace: 'pre-line',
-                      borderTop: '1px solid #f1f5f9',
-                      paddingTop: '12px',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 4,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
-                    }}>
+                    <div className="header-profile-dropdown-about">
                       {userProfile.about}
                     </div>
                   )}
+
+                  <button 
+                    onClick={() => {
+                      setIsHoveringProfile(false);
+                      if (onLogout) onLogout();
+                    }}
+                    className="header-profile-dropdown-logout-btn"
+                  >
+                    Sign Out
+                  </button>
                 </div>
               </motion.div>
             )}
@@ -161,3 +136,4 @@ export default function Header({ activeTab, setActiveTab, userProfile, searchQue
     </header>
   );
 }
+

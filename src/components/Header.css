@@ -1,0 +1,120 @@
+.header-logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-logo-img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.header-write-link-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-profile-menu-container {
+  position: relative;
+}
+
+.header-profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 12px;
+  width: 300px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.05);
+  z-index: 100;
+  cursor: default;
+  border: 1px solid #f1f5f9;
+  text-align: left;
+}
+
+.header-profile-dropdown-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header-profile-dropdown-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-green-light);
+}
+
+.header-profile-dropdown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.header-profile-dropdown-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.header-profile-dropdown-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.header-profile-dropdown-pronouns {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.header-profile-dropdown-headline {
+  font-size: 13px;
+  color: var(--primary-green);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.header-profile-dropdown-followers {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.header-profile-dropdown-about {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.5;
+  white-space: pre-line;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.header-profile-dropdown-logout-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ef4444;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.header-profile-dropdown-logout-btn:hover {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+}

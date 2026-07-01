@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MessageCircle, Bookmark, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -23,6 +23,7 @@ import CommentsSection from './CommentsSection';
 export default function ArticleCard({ article, isSaved, onSaveClick, onTitleClick, onAddComment, onAuthorClick }) {
   const [claps, setClaps] = useState(article.initialClaps || article.claps || 0);
   const [hasClapped, setHasClapped] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const [showShareTooltip, setShowShareTooltip] = useState(false);
   const [showComments, setShowComments] = useState(false);
 
@@ -39,13 +40,30 @@ export default function ArticleCard({ article, isSaved, onSaveClick, onTitleClic
     }
   };
 
-  const handleShare = (e) => {
+  const handleShareOption = (option, e) => {
     e.stopPropagation();
-    setShowShareTooltip(true);
-    navigator.clipboard.writeText(window.location.origin + `/article/${article.id}`);
-    setTimeout(() => {
-      setShowShareTooltip(false);
-    }, 2000);
+    const articleUrl = `${window.location.origin}${window.location.pathname}#article-${article.id}`;
+    const shareText = `Check out this article on Scholr: "${article.title}" - ${articleUrl}`;
+    
+    if (option === 'copy') {
+      navigator.clipboard.writeText(articleUrl);
+      setShowShareTooltip(true);
+      setTimeout(() => setShowShareTooltip(false), 2000);
+    } else if (option === 'whatsapp') {
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
+    } else if (option === 'twitter') {
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
+    } else if (option === 'email') {
+      window.open(`mailto:?subject=${encodeURIComponent(article.title)}&body=${encodeURIComponent(shareText)}`, '_blank');
+    } else if (option === 'native' && navigator.share) {
+      navigator.share({
+        title: article.title,
+        text: article.excerpt,
+        url: articleUrl,
+      }).catch(err => console.log(err));
+    }
+    
+    setShowShareMenu(false);
   };
 
   // Convert clap count into a formatted string (e.g., 2.4k)
@@ -58,14 +76,13 @@ export default function ArticleCard({ article, isSaved, onSaveClick, onTitleClic
 
   return (
     <motion.article 
-      className="article-card"
+      className="article-card article-card-stacked"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '40px', width: '100%', alignItems: 'flex-start' }}>
+      <div className="article-card-row">
         <div className="article-card-left">
           <div className="article-meta">
             <a href={`#category-${article.category ? article.category.toLowerCase().replace(' ', '-') : 'general'}`} className="article-category">
@@ -73,14 +90,11 @@ export default function ArticleCard({ article, isSaved, onSaveClick, onTitleClic
             </a>
             <span className="meta-divider">•</span>
             <span 
-              className="article-author"
-              style={{ cursor: 'pointer' }}
+              className="article-author article-author-clickable"
               onClick={(e) => {
                 e.stopPropagation();
                 if (onAuthorClick) onAuthorClick(article.author);
               }}
-              onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
-              onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
             >
               {article.author}
             </span>
@@ -136,7 +150,6 @@ export default function ArticleCard({ article, isSaved, onSaveClick, onTitleClic
                 whileTap={{ scale: 1.3 }}
                 animate={isSaved ? { scale: [1, 1.3, 0.9, 1.1, 1] } : {}}
                 transition={{ duration: 0.4 }}
-                style={isSaved ? { color: 'var(--primary-green)' } : {}}
               >
                 <Bookmark 
                   size={18} 
@@ -144,10 +157,13 @@ export default function ArticleCard({ article, isSaved, onSaveClick, onTitleClic
                 />
               </motion.button>
 
-              <div style={{ position: 'relative' }}>
+              <div className="article-share-wrapper" onMouseLeave={() => setShowShareMenu(false)}>
                 <motion.button 
                   className="article-action-btn"
-                  onClick={handleShare}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowShareMenu(!showShareMenu);
+                  }}
                   whileTap={{ scale: 0.9 }}
                   whileHover={{ scale: 1.1 }}
                 >
@@ -155,26 +171,59 @@ export default function ArticleCard({ article, isSaved, onSaveClick, onTitleClic
                 </motion.button>
                 
                 <AnimatePresence>
+                  {showShareMenu && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: -190, x: -90, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                      className="article-share-menu"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {navigator.share && (
+                        <button 
+                          onClick={(e) => handleShareOption('native', e)}
+                          className="article-share-option"
+                        >
+                          System Share
+                        </button>
+                      )}
+                      <button 
+                        onClick={(e) => handleShareOption('copy', e)}
+                        className="article-share-option"
+                      >
+                        Copy Link
+                      </button>
+                      <button 
+                        onClick={(e) => handleShareOption('whatsapp', e)}
+                        className="article-share-option"
+                      >
+                        WhatsApp
+                      </button>
+                      <button 
+                        onClick={(e) => handleShareOption('twitter', e)}
+                        className="article-share-option"
+                      >
+                        Twitter / X
+                      </button>
+                      <button 
+                        onClick={(e) => handleShareOption('email', e)}
+                        className="article-share-option"
+                      >
+                        Email
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                
+                <AnimatePresence>
                   {showShareTooltip && (
                     <motion.div 
-                      initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                      animate={{ opacity: 1, y: -35, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                      initial={{ opacity: 0, x: '-50%', y: 10, scale: 0.9 }}
+                      animate={{ opacity: 1, x: '-50%', y: -35, scale: 1 }}
+                      exit={{ opacity: 0, x: '-50%', y: 10, scale: 0.9 }}
                       transition={{ duration: 0.2 }}
-                      style={{
-                        position: 'absolute',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        background: '#111111',
-                        color: '#ffffff',
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        whiteSpace: 'nowrap',
-                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                        zIndex: 10
-                      }}
+                      className="article-share-tooltip"
                     >
                       Link copied!
                     </motion.div>
@@ -203,7 +252,7 @@ export default function ArticleCard({ article, isSaved, onSaveClick, onTitleClic
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            style={{ width: '100%', overflow: 'hidden' }}
+            className="article-comments-motion-wrapper"
           >
             <CommentsSection 
               articleId={article.id} 

@@ -1,0 +1,32 @@
+.sidebar-left-custom {
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.sidebar-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+}
+
+.sidebar-link-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-link-wrapper-margin {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.sidebar-button-reset {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}

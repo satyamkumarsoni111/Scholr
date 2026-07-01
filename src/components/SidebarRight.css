@@ -1,0 +1,5 @@
+.topic-tag.selected {
+  background: var(--primary-green);
+  color: #ffffff;
+  border-color: var(--primary-green);
+}

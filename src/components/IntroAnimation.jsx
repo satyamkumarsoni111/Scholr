@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getImagePath } from '../utils/paths';
+import './IntroAnimation.css';
 
 // Avatars of diverse students around the world (generated in prior step)
 const STUDENT_AVATARS = [
@@ -54,25 +55,11 @@ export default function IntroAnimation({ onComplete }) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.0, ease: 'easeInOut' }}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: '#000000',
-            zIndex: 99999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-            fontFamily: "'Inter', sans-serif",
-            userSelect: 'none',
-          }}
+          className="intro-overlay"
         >
           {/* Phase 1 & 2: Floating & Gathering Avatars */}
           {(phase === 'float' || phase === 'gather') && (
-            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <div className="intro-avatars-container">
               {STUDENT_AVATARS.map((avatar) => {
                 const isGathering = phase === 'gather';
                 return (
@@ -86,7 +73,7 @@ export default function IntroAnimation({ onComplete }) {
                     }}
                     animate={
                       isGathering
-                        ? {
+                         ? {
                             x: 0,
                             y: 0,
                             scale: 0.1,
@@ -121,25 +108,13 @@ export default function IntroAnimation({ onComplete }) {
                             y: { repeat: Infinity, duration: 3.5 + avatar.id, ease: 'easeInOut' },
                           }
                     }
-                    style={{
-                      position: 'absolute',
-                      left: '50%',
-                      top: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      zIndex: 2,
-                    }}
+                    className="intro-avatar-wrapper"
                   >
                     <img
                       src={avatar.src}
                       alt="Student Portrait"
-                      style={{
-                        width: `${avatar.size}px`,
-                        height: `${avatar.size}px`,
-                        borderRadius: '50%',
-                        border: '3px solid rgba(255, 255, 255, 0.95)',
-                        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.2)',
-                        objectFit: 'cover',
-                      }}
+                      className="intro-avatar-img"
+                      style={{ '--intro-avatar-size': `${avatar.size}px` }}
                       onError={(e) => {
                         // Fallback in case of asset path issues
                         e.target.src = getImagePath('/images/avatar_user.png');
@@ -158,12 +133,7 @@ export default function IntroAnimation({ onComplete }) {
               animate={{ scale: 1.0, opacity: 1, filter: 'blur(0px)' }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ duration: 0.7, ease: [0.34, 1.56, 0.64, 1] }} // Soft elastic bounce
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#ffffff',
-              }}
+              className="intro-pen-morph"
             >
               {/* Minimal SVG Pen */}
               <svg
@@ -185,22 +155,11 @@ export default function IntroAnimation({ onComplete }) {
 
           {/* Phase 4 & 5: Writing and Lingering Text */}
           {(phase === 'write' || phase === 'fade-pen') && (
-            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <div style={{ position: 'relative', display: 'inline-block' }}>
+            <div className="intro-write-block">
+              <div className="intro-brand-wrapper">
                 
                 {/* Organic, high-fidelity human handwriting layout */}
-                <div style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: 'clamp(1.8rem, 5vw, 3.2rem)',
-                  fontWeight: 700,
-                  letterSpacing: '-0.5px',
-                  color: '#ffffff',
-                  whiteSpace: 'nowrap',
-                  display: 'flex',
-                  alignItems: 'center',
-                  paddingRight: '12px',
-                  textShadow: '0 0 10px rgba(255, 255, 255, 0.25)'
-                }}>
+                <div className="intro-brand-text">
                   {textChars.map((char, index) => (
                     <motion.span
                       key={index}
@@ -212,7 +171,7 @@ export default function IntroAnimation({ onComplete }) {
                         duration: 0.18,
                         ease: [0.34, 1.56, 0.64, 1] // elastic organic ink flow
                       }}
-                      style={{ display: 'inline-block', whiteSpace: 'pre' }}
+                      className="intro-brand-char"
                     >
                       {char}
                     </motion.span>
@@ -250,28 +209,10 @@ export default function IntroAnimation({ onComplete }) {
                       rotate: { duration: 2.1, ease: "easeInOut" },
                       filter: { duration: 2.1, ease: "linear" },
                     }}
-                    style={{
-                      position: 'absolute',
-                      top: '32%', 
-                      transform: 'translate(-12px, -50%)',
-                      width: '46px',
-                      height: '46px',
-                      pointerEvents: 'none',
-                      color: '#ffffff',
-                      zIndex: 10,
-                    }}
+                    className="intro-pen-writer"
                   >
                     {/* Glowing fluid ink point at the pen nib (bottom left) */}
-                    <div style={{
-                      position: 'absolute',
-                      left: '4px',
-                      bottom: '4px',
-                      width: '10px',
-                      height: '10px',
-                      borderRadius: '50%',
-                      background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0) 80%)',
-                      boxShadow: '0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4)',
-                    }} />
+                    <div className="intro-pen-ink-glow" />
 
                     <svg
                       viewBox="0 0 24 24"
@@ -280,11 +221,7 @@ export default function IntroAnimation({ onComplete }) {
                       strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        transform: 'rotate(-8deg)',
-                      }}
+                      className="intro-pen-svg"
                     >
                       <path d="M12 20h9" />
                       <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
@@ -299,15 +236,7 @@ export default function IntroAnimation({ onComplete }) {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.1, duration: 0.8 }}
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: 'clamp(0.95rem, 2vw, 1.25rem)',
-                  fontWeight: 500,
-                  color: '#94a3b8',
-                  letterSpacing: '1.5px',
-                  textAlign: 'center',
-                  marginTop: '12px'
-                }}
+                className="intro-tagline"
               >
                 Write  |  Read  |  Learn  |  Grow
               </motion.div>
@@ -318,3 +247,4 @@ export default function IntroAnimation({ onComplete }) {
     </AnimatePresence>
   );
 }
+

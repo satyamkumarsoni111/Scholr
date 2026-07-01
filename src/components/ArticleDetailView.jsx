@@ -125,7 +125,18 @@ export default function ArticleDetailView({ article, onBack, toggleSave, isSaved
         <div className="detail-pub-row">
           <span style={{ color: 'var(--primary-green)', fontWeight: '700' }}>{article.publication}</span>
           <span className="meta-divider">•</span>
-          <span style={{ color: '#64748b' }}>Published in AI Insights</span>
+          <span style={{ color: '#64748b' }}>Published in {article.category || 'AI Insights'}</span>
+          {article.tags && article.tags.map((tag, index) => (
+            <span key={index} className="detail-meta-badge" style={{
+              marginLeft: '8px',
+              padding: '2px 8px',
+              backgroundColor: '#f1f5f9',
+              borderRadius: '999px',
+              fontSize: '12px',
+              color: '#475569',
+              fontWeight: '500'
+            }}>{tag}</span>
+          ))}
         </div>
         
         <h1 className="detail-title">{article.title}</h1>
@@ -168,6 +179,32 @@ export default function ArticleDetailView({ article, onBack, toggleSave, isSaved
           />
         </div>
       )}
+
+      {/* TL;DR Highlight Box */}
+      <div className="article-tldr-box" style={{
+        backgroundColor: 'rgba(26, 137, 23, 0.05)',
+        borderLeft: '4px solid var(--primary-green)',
+        borderRadius: '8px',
+        padding: '16px 20px',
+        marginBottom: '32px'
+      }}>
+        <div className="tldr-title" style={{
+          fontSize: '14px',
+          fontWeight: '700',
+          color: 'var(--primary-green)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+          marginBottom: '6px'
+        }}>⚡ TL;DR Summary</div>
+        <p className="tldr-text" style={{
+          fontSize: '15px',
+          lineHeight: '1.6',
+          color: '#334155',
+          margin: 0
+        }}>
+          {article.excerpt || "A quick overview highlighting key findings, academic tips, and core takeaways from this student contribution."}
+        </p>
+      </div>
 
       {/* Article Body Content */}
       <div className="article-detail-body">
@@ -260,6 +297,83 @@ export default function ArticleDetailView({ article, onBack, toggleSave, isSaved
               )}
             </AnimatePresence>
           </div>
+        </div>
+      </div>
+
+      {/* Author Card Section */}
+      <div className="detail-author-card" style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '20px',
+        padding: '24px',
+        backgroundColor: '#f8fafc',
+        borderRadius: '12px',
+        marginTop: '32px',
+        border: '1px solid #e2e8f0'
+      }}>
+        <img 
+          src={article.author === 'Satyam' || isOwnArticle ? getImagePath('/images/avatar_user.png') : getImagePath(`/images/avatar_${article.author.toLowerCase().split(' ')[0]}.png`)} 
+          alt={article.author}
+          style={{
+            width: '64px',
+            height: '64px',
+            borderRadius: '50%',
+            objectFit: 'cover'
+          }}
+          onError={(e) => {
+            e.target.src = getImagePath('/images/avatar_user.png');
+          }}
+        />
+        <div style={{ flex: 1 }}>
+          <h3 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '700', color: '#0f172a' }}>Written by {article.author}</h3>
+          <p style={{ margin: '0 0 8px 0', fontSize: '13.5px', color: '#475569', fontWeight: '500' }}>Student & Creator on Scholr</p>
+          <p style={{ margin: 0, fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>
+            A passionate academic contributor interested in learning, writing, and sharing technological insights to help peers grow.
+          </p>
+        </div>
+      </div>
+
+      {/* Related Articles Section */}
+      <div className="related-articles-section" style={{ marginTop: '40px', marginBottom: '32px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', marginBottom: '16px' }}>Recommended Reading</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          {[
+            {
+              id: 'r1',
+              title: 'Mastering React State: Advanced Context & Reducers',
+              author: 'Alex Chen',
+              category: 'Code Academy',
+              image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&auto=format&fit=crop',
+              readTime: '4 min read'
+            },
+            {
+              id: 'r2',
+              title: 'The AI Revolution in Scientific Research Papers',
+              author: 'Anna Richards',
+              category: 'AI Insights',
+              image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop',
+              readTime: '6 min read'
+            }
+          ].map((item) => (
+            <div key={item.id} className="related-card" style={{
+              border: '1px solid #e2e8f0',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              backgroundColor: '#ffffff'
+            }}>
+              <img src={item.image} alt={item.title} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
+              <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--primary-green)', textTransform: 'uppercase', marginBottom: '4px' }}>{item.category}</span>
+                <h4 style={{ fontSize: '13.5px', fontWeight: '700', color: '#0f172a', margin: '0 0 8px 0', lineHeight: '1.4', flex: 1 }}>{item.title}</h4>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748b' }}>
+                  <span>{item.author}</span>
+                  <span>{item.readTime}</span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

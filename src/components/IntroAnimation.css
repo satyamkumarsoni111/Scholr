@@ -1,0 +1,115 @@
+.intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  user-select: none;
+}
+
+.intro-avatars-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.intro-avatar-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.intro-avatar-img {
+  width: var(--intro-avatar-size);
+  height: var(--intro-avatar-size);
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  object-fit: cover;
+}
+
+.intro-pen-morph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.intro-write-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.intro-brand-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.intro-brand-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+}
+
+.intro-brand-char {
+  display: inline-block;
+  white-space: pre;
+}
+
+.intro-pen-writer {
+  position: absolute;
+  top: 32%;
+  transform: translate(-12px, -50%);
+  width: 46px;
+  height: 46px;
+  pointer-events: none;
+  color: #ffffff;
+  z-index: 10;
+}
+
+.intro-pen-ink-glow {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0) 80%);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.intro-pen-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-8deg);
+}
+
+.intro-tagline {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(0.95rem, 2vw, 1.25rem);
+  font-weight: 500;
+  color: #94a3b8;
+  letter-spacing: 1.5px;
+  text-align: center;
+  margin-top: 12px;
+}

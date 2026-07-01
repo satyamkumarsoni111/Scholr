@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { X, Camera, Save, GraduationCap, Cpu, Link, AlignLeft, Info } from 'lucide-react';
 import { getImagePath } from '../utils/paths';
+import './EditProfileModal.css';
 
 export default function EditProfileModal({ isOpen, onClose, userProfile, onSave }) {
-  const [avatar, setAvatar] = useState(userProfile.avatar || getImagePath('/images/avatar_user.png'));
+  const [avatar, setAvatar] = useState(userProfile.avatar || '');
   const [name, setName] = useState(userProfile.name || '');
   const [headline, setHeadline] = useState(userProfile.headline || '');
   const [about, setAbout] = useState(userProfile.about || '');
@@ -23,8 +24,8 @@ export default function EditProfileModal({ isOpen, onClose, userProfile, onSave 
   if (!isOpen) return null;
 
   const handleSave = () => {
-    if (!name.trim() || !headline.trim() || !about.trim() || !education.trim() || !branch.trim() || !gradYear.trim() || !collegeLocation.trim() || !skills.trim() || !areasOfInterest.trim() || !github.trim() || !linkedin.trim()) {
-      alert("please fill all section carefulyy.....");
+    if (!name.trim()) {
+      alert("please fill name section carefulyy.....");
       return;
     }
 
@@ -46,102 +47,52 @@ export default function EditProfileModal({ isOpen, onClose, userProfile, onSave 
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      backgroundColor: 'rgba(15, 23, 42, 0.4)',
-      backdropFilter: 'blur(4px)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 2000, // Make sure it sits above the global drawer
-      padding: '20px'
-    }}>
+    <div className="edit-profile-overlay">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: '16px',
-          width: '100%',
-          maxWidth: '1000px',
-          maxHeight: '85vh',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-          overflow: 'hidden',
-          fontFamily: '"Inter", sans-serif'
-        }}
+        className="edit-profile-dialog"
       >
         {/* Modal Header */}
-        <div style={{
-          padding: '18px 24px',
-          borderBottom: '1px solid #f1f5f9',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexShrink: 0
-        }}>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#0f172a', margin: 0 }}>
+        <div className="edit-profile-header">
+          <h2 className="edit-profile-title">
             Edit Profile Info
           </h2>
           <button 
             onClick={onClose}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#94a3b8',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              padding: '4px',
-              borderRadius: '50%'
-            }}
+            className="edit-profile-close-btn"
           >
             <X size={20} />
           </button>
         </div>
 
         {/* Modal Body (Premium Two-Column Dashboard) */}
-        <div style={{
-          padding: '24px',
-          overflowY: 'auto',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '32px',
-          maxHeight: '68vh'
-        }}>
+        <div className="edit-profile-body">
           
           {/* Left Column: Avatar Photo & Basic Information */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div className="edit-profile-col">
             
             {/* 1. Profile Photo Edit */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Camera size={15} style={{ color: 'var(--primary-green)' }} />
+            <div className="edit-profile-section">
+              <span className="edit-profile-section-title">
+                <Camera size={15} />
                 Profile Photo
               </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                <div style={{ position: 'relative', width: '70px', height: '70px', flexShrink: 0 }}>
+              <div className="edit-avatar-row">
+                <div className="edit-avatar-preview-wrapper">
                   <img 
-                    src={avatar} 
+                    src={avatar || getImagePath('/images/avatar_user.png')} 
                     alt="Avatar Preview" 
-                    style={{
-                      width: '70px',
-                      height: '70px',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      border: '3px solid var(--primary-green-light)'
-                    }}
+                    className="edit-avatar-img"
                   />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, justifyContent: 'center' }}>
+                <div className="edit-avatar-actions">
                   <input 
                     type="file" 
                     accept="image/*"
                     ref={fileInputRef}
-                    style={{ display: 'none' }}
+                    className="edit-profile-hidden-input"
                     onChange={(e) => {
                       const file = e.target.files[0];
                       if (file) {
@@ -155,17 +106,7 @@ export default function EditProfileModal({ isOpen, onClose, userProfile, onSave 
                   />
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    style={{
-                      padding: '8px 12px',
-                      backgroundColor: '#f1f5f9',
-                      color: '#0f172a',
-                      border: '1px solid #cbd5e1',
-                      borderRadius: '6px',
-                      fontSize: '12.5px',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      alignSelf: 'flex-start'
-                    }}
+                    className="edit-upload-btn"
                   >
                     Upload Photo from Device
                   </button>
@@ -174,45 +115,45 @@ export default function EditProfileModal({ isOpen, onClose, userProfile, onSave 
             </div>
 
             {/* 2. Basic Info (Name, Headline, About) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px', borderBottom: '1px solid #f1f5f9', paddingBottom: '6px' }}>
-                <AlignLeft size={15} style={{ color: 'var(--primary-green)' }} />
+            <div className="edit-profile-section">
+              <span className="edit-profile-section-title bordered">
+                <AlignLeft size={15} />
                 Basic Information
               </span>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '14px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>Full Name *</label>
+              <div className="edit-fields-grid-single">
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">Full Name *</label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Satyam"
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>Professional Headline *</label>
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">Professional Headline *</label>
                   <input
                     type="text"
                     value={headline}
                     onChange={(e) => setHeadline(e.target.value)}
                     placeholder="AI/ML Enthusiast | Web Developer | Open Source Learner"
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Info size={13} style={{ color: 'var(--primary-green)' }} />
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">
+                    <Info size={13} />
                     About *
                   </label>
                   <textarea
                     value={about}
                     onChange={(e) => setAbout(e.target.value)}
                     placeholder="Tell us about yourself..."
-                    style={{ width: '100%', minHeight: '120px', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none', resize: 'vertical' }}
+                    className="edit-field-textarea"
                   />
                 </div>
               </div>
@@ -221,132 +162,132 @@ export default function EditProfileModal({ isOpen, onClose, userProfile, onSave 
           </div>
 
           {/* Right Column: Academic Details, Skills, Web Links */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div className="edit-profile-col">
 
             {/* 3. Academic Details (College, Branch, Graduation Year, College Location) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px', borderBottom: '1px solid #f1f5f9', paddingBottom: '6px' }}>
-                <GraduationCap size={15} style={{ color: 'var(--primary-green)' }} />
+            <div className="edit-profile-section">
+              <span className="edit-profile-section-title bordered">
+                <GraduationCap size={15} />
                 Academic Details
               </span>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>Education / College *</label>
+              <div className="edit-fields-grid-double">
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">Education / College *</label>
                   <input
                     type="text"
                     value={education}
                     onChange={(e) => setEducation(e.target.value)}
                     placeholder="College or University name..."
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>Branch *</label>
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">Branch *</label>
                   <input
                     type="text"
                     value={branch}
                     onChange={(e) => setBranch(e.target.value)}
                     placeholder="Computer Science, ECE, etc..."
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>Graduation Year *</label>
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">Graduation Year *</label>
                   <input
                     type="text"
                     value={gradYear}
                     onChange={(e) => setGradYear(e.target.value)}
                     placeholder="e.g. 2028"
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>College Location *</label>
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">College Location *</label>
                   <input
                     type="text"
                     value={collegeLocation}
                     onChange={(e) => setCollegeLocation(e.target.value)}
                     placeholder="e.g. Ranchi, Jharkhand, India"
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
               </div>
             </div>
 
             {/* 4. Skills & Interests */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px', borderBottom: '1px solid #f1f5f9', paddingBottom: '6px' }}>
-                <Cpu size={15} style={{ color: 'var(--primary-green)' }} />
+            <div className="edit-profile-section">
+              <span className="edit-profile-section-title bordered">
+                <Cpu size={15} />
                 Skills & Interests
               </span>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>Skills (comma separated) *</label>
+              <div className="edit-fields-grid-single">
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">Skills (comma separated) *</label>
                   <input
                     type="text"
                     value={skills}
                     onChange={(e) => setSkills(e.target.value)}
                     placeholder="React, Python, DSA, Machine Learning"
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>Areas of Interest *</label>
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">Areas of Interest *</label>
                   <input
                     type="text"
                     value={areasOfInterest}
                     onChange={(e) => setAreasOfInterest(e.target.value)}
                     placeholder="Robotics & Automation, AI, Frontend, etc..."
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
               </div>
             </div>
 
             {/* 5. Web Connections (Optional Links) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px', borderBottom: '1px solid #f1f5f9', paddingBottom: '6px' }}>
-                <Link size={15} style={{ color: 'var(--primary-green)' }} />
+            <div className="edit-profile-section">
+              <span className="edit-profile-section-title bordered">
+                <Link size={15} />
                 Web Links (Optional)
               </span>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>GitHub Link *</label>
+              <div className="edit-links-grid">
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">GitHub Link *</label>
                   <input
                     type="url"
                     value={github}
                     onChange={(e) => setGithub(e.target.value)}
                     placeholder="https://github.com/username"
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>LinkedIn Link *</label>
+                <div className="edit-field-wrapper">
+                  <label className="edit-field-label">LinkedIn Link *</label>
                   <input
                     type="url"
                     value={linkedin}
                     onChange={(e) => setLinkedin(e.target.value)}
                     placeholder="https://linkedin.com/in/username"
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', gridColumn: 'span 2' }}>
-                  <label style={{ fontSize: '12.5px', fontWeight: '600', color: '#475569' }}>Portfolio Website Link (Optional)</label>
+                <div className="edit-field-wrapper span-2">
+                  <label className="edit-field-label">Portfolio Website Link (Optional)</label>
                   <input
                     type="url"
                     value={portfolio}
                     onChange={(e) => setPortfolio(e.target.value)}
                     placeholder="https://yourportfolio.com"
-                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13.5px', outline: 'none' }}
+                    className="edit-field-input"
                   />
                 </div>
               </div>
@@ -357,45 +298,16 @@ export default function EditProfileModal({ isOpen, onClose, userProfile, onSave 
         </div>
 
         {/* Modal Footer */}
-        <div style={{
-          padding: '16px 24px',
-          borderTop: '1px solid #f1f5f9',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: '12px',
-          backgroundColor: '#f8fafc',
-          flexShrink: 0
-        }}>
+        <div className="edit-profile-footer">
           <button
             onClick={onClose}
-            style={{
-              padding: '8px 16px',
-              border: '1px solid #e2e8f0',
-              borderRadius: '8px',
-              fontSize: '13.5px',
-              fontWeight: '500',
-              color: '#475569',
-              background: '#ffffff',
-              cursor: 'pointer'
-            }}
+            className="edit-cancel-btn"
           >
             Cancel
           </button>
           <motion.button
             onClick={handleSave}
-            style={{
-              padding: '8px 18px',
-              backgroundColor: 'var(--primary-green)',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '13.5px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
+            className="edit-save-btn"
             whileHover={{ backgroundColor: '#007042' }}
             whileTap={{ scale: 0.97 }}
           >
@@ -407,3 +319,4 @@ export default function EditProfileModal({ isOpen, onClose, userProfile, onSave 
     </div>
   );
 }
+

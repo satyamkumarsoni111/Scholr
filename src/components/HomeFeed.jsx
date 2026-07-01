@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Star, MessageCircle, Repeat, ThumbsDown, Bookmark, Share2 } from 'lucide-react';
+import { useState } from 'react';
+import { MessageCircle, ThumbsDown, Bookmark, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import './HomeFeed.css';
 
 // Custom high-fidelity Clap Icon
 const ClapIcon = ({ active }) => (
@@ -13,7 +14,7 @@ const ClapIcon = ({ active }) => (
     strokeWidth="1.8" 
     strokeLinecap="round" 
     strokeLinejoin="round"
-    style={{ flexShrink: 0 }}
+    className="clap-icon-custom"
   >
     <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
   </svg>
@@ -21,61 +22,19 @@ const ClapIcon = ({ active }) => (
 
 // High-fidelity Publication Logos
 const LevelUpLogo = () => (
-  <div style={{
-    width: '18px',
-    height: '18px',
-    backgroundColor: '#2563eb', 
-    borderRadius: '4px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#ffffff',
-    fontWeight: '800',
-    fontSize: '9px',
-    fontFamily: '"Outfit", sans-serif',
-    flexShrink: 0,
-    boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
-  }}>
+  <div className="pub-logo-levelup">
     CO
   </div>
 );
 
 const DSCLogo = () => (
-  <div style={{
-    width: '18px',
-    height: '18px',
-    backgroundColor: '#ea580c', 
-    borderRadius: '4px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#ffffff',
-    fontWeight: '800',
-    fontSize: '8px',
-    fontFamily: '"Outfit", sans-serif',
-    flexShrink: 0,
-    boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
-  }}>
+  <div className="pub-logo-dsc">
     DSC
   </div>
 );
 
 const SelfPublishedLogo = () => (
-  <div style={{
-    width: '18px',
-    height: '18px',
-    background: 'linear-gradient(135deg, var(--primary-green) 0%, #00b36c 100%)',
-    borderRadius: '4px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#ffffff',
-    fontWeight: '800',
-    fontSize: '9px',
-    fontFamily: '"Outfit", sans-serif',
-    flexShrink: 0,
-    boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
-  }}>
+  <div className="pub-logo-self">
     S
   </div>
 );
@@ -107,17 +66,16 @@ function HomeArticleCard({ article, currentUser, isSaved, onSaveClick, onTitleCl
 
   return (
     <motion.article 
-      className="article-card"
+      className="article-card home-article-card-layout"
       initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
-      style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '40px', width: '100%', alignItems: 'flex-start' }}>
+      <div className="home-article-card-row">
         <div className="article-card-left">
           {/* Meta Row */}
-          <div className="article-meta" style={{ gap: '8px' }}>
+          <div className="article-meta home-article-meta">
             {article.publication === 'Level Up Coding' ? (
               <LevelUpLogo />
             ) : article.publication === 'Data Science Collective' ? (
@@ -125,19 +83,16 @@ function HomeArticleCard({ article, currentUser, isSaved, onSaveClick, onTitleCl
             ) : (
               <SelfPublishedLogo />
             )}
-            <span style={{ fontSize: '13px', color: '#1f2937' }}>
+            <span className="home-article-pub-text">
               In <strong>{article.publication}</strong>
             </span>
             <span className="meta-divider">by</span>
             <span 
-              className="article-author" 
-              style={{ color: '#4b5563', fontWeight: '500', cursor: 'pointer' }}
+              className="article-author home-article-author" 
               onClick={(e) => {
                 e.stopPropagation();
                 if (onAuthorClick) onAuthorClick(article.author);
               }}
-              onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
-              onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
             >
               {article.author}
             </span>
@@ -148,8 +103,7 @@ function HomeArticleCard({ article, currentUser, isSaved, onSaveClick, onTitleCl
           {/* Title */}
           <a 
             href={`#article-${article.id}`} 
-            className="article-title" 
-            style={{ fontSize: '20px', letterSpacing: '-0.3px', margin: '6px 0 4px 0' }}
+            className="article-title home-article-title" 
             onClick={(e) => {
               e.preventDefault();
               if (onTitleClick) onTitleClick(article);
@@ -159,57 +113,46 @@ function HomeArticleCard({ article, currentUser, isSaved, onSaveClick, onTitleCl
           </a>
 
           {/* Excerpt */}
-          <p className="article-excerpt" style={{ color: '#4b5563', fontSize: '14px', lineHeight: '1.45', marginBottom: '14px' }}>
+          <p className="article-excerpt home-article-excerpt">
             {article.excerpt}
           </p>
 
           {/* Bottom Actions Bar */}
-          <div className="article-footer" style={{ borderTop: 'none', paddingTop: 0 }}>
-            <div className="article-stats-left" style={{ gap: '16px' }}>
+          <div className="article-footer home-article-footer">
+            <div className="article-stats-left home-article-stats-left">
               {/* Claps */}
               <motion.button 
-                className={`article-stat-item ${hasClapped ? 'active' : ''}`}
+                className={`article-stat-item home-article-stat-item-btn ${hasClapped ? 'active' : ''} ${isOwnArticle ? 'disabled' : ''}`}
                 onClick={isOwnArticle ? undefined : handleClap}
                 whileTap={isOwnArticle ? {} : { scale: 1.25 }}
                 whileHover={isOwnArticle ? {} : { scale: 1.05 }}
-                style={{ 
-                  gap: '4px',
-                  cursor: isOwnArticle ? 'not-allowed' : 'pointer',
-                  opacity: isOwnArticle ? 0.6 : 1
-                }}
                 title={isOwnArticle ? "You cannot like your own article" : "Like this story"}
               >
                 <ClapIcon active={hasClapped} />
-                <span style={{ fontWeight: '500' }}>{formatCount(claps)}</span>
+                <span className="home-article-claps-text">{formatCount(claps)}</span>
               </motion.button>
 
               {/* Comments */}
               <motion.button 
-                className={`article-stat-item ${showComments ? 'active' : ''}`}
+                className={`article-stat-item home-article-comments-btn ${showComments ? 'active' : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowComments(!showComments);
                 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                style={{ gap: '4px' }}
               >
                 <MessageCircle size={15} />
                 <span>{article.comments || 0}</span>
               </motion.button>
             </div>
 
-            <div className="article-actions-right" style={{ gap: '14px' }}>
+            <div className="article-actions-right home-article-actions-right">
               {/* Thumbs Down */}
               <motion.button 
-                className="article-action-btn"
+                className={`article-action-btn home-article-dislike-btn ${isDisliked ? 'active' : ''} ${isOwnArticle ? 'disabled' : ''}`}
                 onClick={isOwnArticle ? undefined : () => setIsDisliked(!isDisliked)}
                 whileTap={isOwnArticle ? {} : { scale: 0.85 }}
-                style={{ 
-                  color: isDisliked ? '#ef4444' : '',
-                  cursor: isOwnArticle ? 'not-allowed' : 'pointer',
-                  opacity: isOwnArticle ? 0.6 : 1
-                }}
                 title={isOwnArticle ? "You cannot dislike your own article" : "Show less of this"}
               >
                 <ThumbsDown size={17} fill={isDisliked ? "currentColor" : "none"} />
@@ -217,24 +160,19 @@ function HomeArticleCard({ article, currentUser, isSaved, onSaveClick, onTitleCl
 
               {/* Bookmark */}
               <motion.button 
-                className={`article-action-btn ${isSaved ? 'active' : ''}`}
+                className={`article-action-btn home-article-save-btn ${isSaved ? 'active' : ''} ${isOwnArticle ? 'disabled' : ''}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (onSaveClick) onSaveClick();
                 }}
                 whileTap={isOwnArticle ? {} : { scale: 1.25 }}
-                style={{ 
-                  color: isSaved ? 'var(--primary-green)' : '',
-                  cursor: isOwnArticle ? 'not-allowed' : 'pointer',
-                  opacity: isOwnArticle ? 0.6 : 1
-                }}
                 title={isOwnArticle ? "You cannot save your own article" : "Save this story"}
               >
                 <Bookmark size={17} fill={isSaved ? "currentColor" : "none"} />
               </motion.button>
 
               {/* Share button instead of 3 dots */}
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <div className="home-article-share-wrapper">
                 <motion.button 
                   className="article-action-btn"
                   onClick={(e) => {
@@ -257,20 +195,7 @@ function HomeArticleCard({ article, currentUser, isSaved, onSaveClick, onTitleCl
                       animate={{ opacity: 1, y: -35, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.9 }}
                       transition={{ duration: 0.2 }}
-                      style={{
-                        position: 'absolute',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        background: '#111111',
-                        color: '#ffffff',
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        whiteSpace: 'nowrap',
-                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                        zIndex: 10
-                      }}
+                      className="home-article-share-tooltip"
                     >
                       Link copied!
                     </motion.div>
@@ -282,7 +207,7 @@ function HomeArticleCard({ article, currentUser, isSaved, onSaveClick, onTitleCl
         </div>
 
         {/* Right Thumbnail Image */}
-        <div className="article-card-right" style={{ width: '140px', height: '92px' }}>
+        <div className="article-card-right home-article-image-wrapper">
           <img 
             src={article.image} 
             alt={article.title} 
@@ -299,7 +224,7 @@ function HomeArticleCard({ article, currentUser, isSaved, onSaveClick, onTitleCl
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            style={{ width: '100%', overflow: 'hidden' }}
+            className="home-article-comments-wrapper"
           >
             <CommentsSection 
               articleId={article.id} 
@@ -326,18 +251,11 @@ export default function HomeFeed({
   onAuthorClick
 }) {
   const tabs = ['For you', 'Featured', ...(selectedTopic ? [selectedTopic] : [])];
-  const [activeTab, setActiveTab] = useState('For you');
-
-  useEffect(() => {
-    if (selectedTopic) {
-      setActiveTab(selectedTopic);
-    } else if (activeTab !== 'For you' && activeTab !== 'Featured') {
-      setActiveTab('For you');
-    }
-  }, [selectedTopic]);
+  const [localActiveTab, setLocalActiveTab] = useState('For you');
+  const activeTab = selectedTopic || (localActiveTab === 'Featured' ? 'Featured' : 'For you');
 
   const handleTabClick = (tab) => {
-    setActiveTab(tab);
+    setLocalActiveTab(tab);
     if (tab !== selectedTopic && setSelectedTopic) {
       setSelectedTopic(null);
     }
@@ -447,18 +365,11 @@ export default function HomeFeed({
                 />
               ))
             ) : (
-              <div style={{ 
-                padding: '48px 24px', 
-                textAlign: 'center', 
-                backgroundColor: '#f8fafc', 
-                borderRadius: '16px', 
-                border: '1px dashed #e2e8f0', 
-                marginTop: '16px' 
-              }}>
-                <span style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a', display: 'block', marginBottom: '6px' }}>
+              <div className="home-feed-empty-container">
+                <span className="home-feed-empty-title">
                   No matches found for "{searchQuery}"
                 </span>
-                <span style={{ fontSize: '13.5px', color: '#64748b', display: 'block', maxWidth: '320px', margin: '0 auto', lineHeight: '1.5' }}>
+                <span className="home-feed-empty-desc">
                   Try checking your spelling, selecting another tab, or searching for other academic topics.
                 </span>
               </div>

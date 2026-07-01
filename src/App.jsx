@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import SidebarLeft from './components/SidebarLeft';
 import HomeFeed from './components/HomeFeed';
@@ -13,6 +13,219 @@ import IntroAnimation from './components/IntroAnimation';
 import SavedFeed from './components/SavedFeed';
 import ArticleDetailView from './components/ArticleDetailView';
 import { getImagePath } from './utils/paths';
+import AuthView from './components/AuthView';
+
+// Seed default users if empty
+const seedDefaultUsers = () => {
+  const usersRaw = localStorage.getItem('users');
+  if (!usersRaw) {
+    const satyamUser = {
+      name: 'Satyam',
+      email: 'satyam@scholr.com',
+      password: 'password123',
+      stream: '🎓 B.Tech / B.E.',
+      avatar: getImagePath('/images/avatar_user.png'),
+      banner: 'linear-gradient(135deg, #0F172A 0%, #1A8917 100%)',
+      headline: 'AI/ML Enthusiast | Web Developer | Open Source Learner',
+      education: 'QUAD AI School of Technology / Medhavi Skills University',
+      branch: 'Integrated B.Tech in Computer Science (AI/ML)',
+      gradYear: '2028',
+      collegeLocation: 'Ranchi, Jharkhand, India',
+      skills: 'React, Python, DSA, Machine Learning, C++, HTML, CSS, JavaScript, Git, EasyEDA, Tinkercard, Circuit Design',
+      areasOfInterest: 'Robotics & Automation, Artificial Intelligence, Frontend Development, Participating in Hackathon',
+      github: 'https://github.com/satyam',
+      linkedin: 'https://linkedin.com/in/satyam',
+      portfolio: 'https://satyam.dev',
+      about: `Satyam is a Computer Science (AI/ML) student at QUAD AI School of Technology pursuing an Integrated B.Tech program affiliated with Medhavi Skills University.
+
+He is passionate about Robotics, AI/ML, and building real-world tech projects. He enjoy participating in hackathons, solving practical problems, and learning by building innovative solutions under real challenges.
+Over the past few months, He has worked on robotics projects, PCB design, frontend development, and AI-based ideas while actively participating in multiple hackathons .
+
+🔹 Technical Skills & Tools:
+ • C++, Python
+ • HTML, CSS, JavaScript, React
+ • Git & GitHub
+ • EasyEDA
+ • Tinkercard
+ • Circuit Design
+ • AI/ML Basics
+ • Robotics
+
+🔹 Areas of Interest:
+ • Robotics & Automation
+ • Artificial Intelligence
+ • Frontend Development
+ • Participating in Hackathon
+
+🔹 Achievements & Highlights:
+ • Finalist at hackathon events organized by BITS Pilani
+ • Winner at competitions hosted by Indian Institute of Technology Dhanbad
+ • Winner at tech competitions organized by Birsa Institute of Technology Sindri
+ • Published technical and student-focused articles on Medium .
+
+He believe in learning through hands-on experience, teamwork, and continuous experimentation. Always open to collaborating, learning new technologies, and building impactful project.`,
+      profileArticles: [
+        {
+          id: 'p1',
+          category: 'AI Insights',
+          author: 'Satyam',
+          date: 'May 12',
+          title: 'The Future of AI Agents: Why Students Should Care',
+          excerpt: 'Autonomous agents are redefining the academic landscape, from research automation to personalized study assistants. We look into the AI tools driving student productivity and breakthroughs.',
+          initialClaps: 2400,
+          comments: 2,
+          commentsList: [
+            {
+              id: 'c1',
+              author: 'Anna Richards',
+              avatar: getImagePath('/images/avatar_anna.png'),
+              text: 'This is an outstanding breakdown! The explanation of the agentic loop makes perfect sense.',
+              date: '3 days ago'
+            },
+            {
+              id: 'c2',
+              author: 'Marc Thompson',
+              avatar: getImagePath('/images/avatar_marc.png'),
+              text: 'Absolutely! I have been building similar deterministic loops with python. Keep up the great writing.',
+              date: '2 days ago'
+            }
+          ],
+          image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=500&auto=format&fit=crop',
+          content: [
+            "Autonomous AI agents are set to transform the student experience. Far from being simple text predictors, these agents plan, call APIs, and reason through long-term academic tasks.",
+            "## Personalized Tutors",
+            "Instead of a static textbook, an agent analyzes your homework code, suggests debugging solutions, and tests your understanding with interactive quizzes.",
+            "## Research Automation",
+            "Agents can scour scientific databases, summarize relevant papers, and draft literature review structures, saving students hours of research overhead."
+          ]
+        },
+        {
+          id: 'p2',
+          category: 'Code Academy',
+          author: 'Sarah Miller',
+          date: 'May 10',
+          title: '2024 Web Development Roadmap: From Zero to Full Stack',
+          excerpt: 'Mastering modern web development requires a strategic approach. We break down the absolute essentials of HTML, CSS, JavaScript, React, server architectures, and databases for full mastery.',
+          initialClaps: 1800,
+          comments: 2,
+          commentsList: [
+            {
+              id: 'c1',
+              author: 'Anna Richards',
+              avatar: getImagePath('/images/avatar_anna.png'),
+              text: 'This is an outstanding breakdown! The explanation of the agentic loop makes perfect sense.',
+              date: '3 days ago'
+            },
+            {
+              id: 'c2',
+              author: 'Marc Thompson',
+              avatar: getImagePath('/images/avatar_marc.png'),
+              text: 'Absolutely! I have been building similar deterministic loops with python. Keep up the great writing.',
+              date: '2 days ago'
+            }
+          ],
+          image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&auto=format&fit=crop',
+          content: [
+            "Web development moves incredibly fast. To avoid tutorial hell, build a systematic learning list mapping out standard web structures.",
+            "## Phase 1: Semantic HTML & Vanilla CSS",
+            "Master responsive styling, document mapping, flexbox layouts, and grids.",
+            "## Phase 2: JavaScript & DOM Manipulation",
+            "Understand asynchronous promises, fetch API calls, storage mechanics, and event listeners.",
+            "## Phase 3: Frameworks & Deployments",
+            "Learn React lifecycle states, routers, custom hooks, and publish application bundles to hosting solutions."
+          ]
+        },
+        {
+          id: 'p3',
+          category: 'Student Success',
+          author: 'Satyam',
+          date: 'May 8',
+          title: 'How I Landed a FAANG Internship as a Sophomore',
+          excerpt: 'Networking, open-source contributions, and the exact resume template that got me past the screening bots at Google and Stripe. Here is the step-by-step sophomore guide.',
+          initialClaps: 4200,
+          comments: 2,
+          commentsList: [
+            {
+              id: 'c1',
+              author: 'Anna Richards',
+              avatar: getImagePath('/images/avatar_anna.png'),
+              text: 'This is an outstanding breakdown! The explanation of the agentic loop makes perfect sense.',
+              date: '3 days ago'
+            },
+            {
+              id: 'c2',
+              author: 'Marc Thompson',
+              avatar: getImagePath('/images/avatar_marc.png'),
+              text: 'Absolutely! I have been building similar deterministic loops with python. Keep up the great writing.',
+              date: '2 days ago'
+            }
+          ],
+          image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&auto=format&fit=crop',
+          content: [
+            "Landing a sophomore internship at FAANG is tough, but far from impossible. If you focus on building a robust portfolio and networking, you can skip the standard application filters.",
+            "## 1. Technical Depth Wins",
+            "Don't build basic calculator apps. Build systems that handle multi-user database entries or automate hardware processes.",
+            "## 2. Resume Keyword Optimization",
+            "Align project bullet points to job description nouns: e.g., 'Implemented responsive React hooks, decreasing loading latency by 20%'.",
+            "## 3. Direct Cold Messaging",
+            "Connect with engineering managers, present your open-source projects, and ask for career advice. Often, they will refer you directly."
+          ]
+        }
+      ],
+      savedArticles: [],
+      followingCreators: [
+        {
+          id: 'a1',
+          name: 'Anna Richards',
+          title: 'Data Scientist at Google',
+          avatar: getImagePath('/images/avatar_anna.png')
+        },
+        {
+          id: 'm1',
+          name: 'Marc Thompson',
+          title: 'Senior SWE at Stripe',
+          avatar: getImagePath('/images/avatar_marc.png')
+        }
+      ],
+      followers: [
+        {
+          id: 'f1',
+          name: 'Sarah Miller',
+          title: 'Technical Writer',
+          avatar: getImagePath('/images/avatar_anna.png')
+        },
+        {
+          id: 'f2',
+          name: 'Alex Chen',
+          title: 'AI Engineer',
+          avatar: getImagePath('/images/avatar_user.png')
+        },
+        {
+          id: 'f3',
+          name: 'Sergey Nes',
+          title: 'Staff Developer',
+          avatar: getImagePath('/images/avatar_marc.png')
+        }
+      ]
+    };
+    localStorage.setItem('users', JSON.stringify([satyamUser]));
+  }
+};
+
+seedDefaultUsers();
+
+// Helper to get active user
+const getActiveUser = () => {
+  const raw = localStorage.getItem('currentUser');
+  if (raw) {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+  return null;
+};
 
 // Helper mock comments to initialize articles beautifully
 const mockComments = [
@@ -33,69 +246,92 @@ const mockComments = [
 ];
 
 function App() {
-  const [showIntro, setShowIntro] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return !!localStorage.getItem('currentUser');
+  });
+
+  const [showIntro, setShowIntro] = useState(() => {
+    return !localStorage.getItem('currentUser');
+  });
+
   const [activeTab, setActiveTab] = useState('Home');
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState(null);
 
   // Lifted global states
-  const [savedArticles, setSavedArticles] = useState([]);
+  const [savedArticles, setSavedArticles] = useState(() => {
+    const active = getActiveUser();
+    if (active && active.savedArticles) return active.savedArticles;
+    return [];
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [viewedProfileAuthor, setViewedProfileAuthor] = useState(null);
 
-  const [followingCreators, setFollowingCreators] = useState([
-    {
-      id: 'a1',
-      name: 'Anna Richards',
-      title: 'Data Scientist at Google',
-      avatar: getImagePath('/images/avatar_anna.png')
-    },
-    {
-      id: 'm1',
-      name: 'Marc Thompson',
-      title: 'Senior SWE at Stripe',
-      avatar: getImagePath('/images/avatar_marc.png')
-    }
-  ]);
+  const [followingCreators, setFollowingCreators] = useState(() => {
+    const active = getActiveUser();
+    if (active && active.followingCreators) return active.followingCreators;
+    return [
+      {
+        id: 'a1',
+        name: 'Anna Richards',
+        title: 'Data Scientist at Google',
+        avatar: getImagePath('/images/avatar_anna.png')
+      },
+      {
+        id: 'm1',
+        name: 'Marc Thompson',
+        title: 'Senior SWE at Stripe',
+        avatar: getImagePath('/images/avatar_marc.png')
+      }
+    ];
+  });
 
-  const [followers, setFollowers] = useState([
-    {
-      id: 'f1',
-      name: 'Sarah Miller',
-      title: 'Technical Writer',
-      avatar: getImagePath('/images/avatar_anna.png')
-    },
-    {
-      id: 'f2',
-      name: 'Alex Chen',
-      title: 'AI Engineer',
-      avatar: getImagePath('/images/avatar_user.png')
-    },
-    {
-      id: 'f3',
-      name: 'Sergey Nes',
-      title: 'Staff Developer',
-      avatar: getImagePath('/images/avatar_marc.png')
-    }
-  ]);
+  const [followers, setFollowers] = useState(() => {
+    const active = getActiveUser();
+    if (active && active.followers) return active.followers;
+    return [
+      {
+        id: 'f1',
+        name: 'Sarah Miller',
+        title: 'Technical Writer',
+        avatar: getImagePath('/images/avatar_anna.png')
+      },
+      {
+        id: 'f2',
+        name: 'Alex Chen',
+        title: 'AI Engineer',
+        avatar: getImagePath('/images/avatar_user.png')
+      },
+      {
+        id: 'f3',
+        name: 'Sergey Nes',
+        title: 'Staff Developer',
+        avatar: getImagePath('/images/avatar_marc.png')
+      }
+    ];
+  });
 
   // Central User Profile state
-  const [userProfile, setUserProfile] = useState({
-    name: 'Satyam',
-    avatar: getImagePath('/images/avatar_user.png'),
-    banner: 'linear-gradient(135deg, #0F172A 0%, #1A8917 100%)',
-    headline: 'AI/ML Enthusiast | Web Developer | Open Source Learner',
-    education: 'QUAD AI School of Technology / Medhavi Skills University',
-    branch: 'Integrated B.Tech in Computer Science (AI/ML)',
-    gradYear: '2028',
-    collegeLocation: 'Ranchi, Jharkhand, India',
-    skills: 'React, Python, DSA, Machine Learning, C++, HTML, CSS, JavaScript, Git, EasyEDA, Tinkercard, Circuit Design',
-    areasOfInterest: 'Robotics & Automation, Artificial Intelligence, Frontend Development, Participating in Hackathon',
-    github: 'https://github.com/satyam',
-    linkedin: 'https://linkedin.com/in/satyam',
-    portfolio: 'https://satyam.dev',
-    about: `Satyam is a Computer Science (AI/ML) student at QUAD AI School of Technology pursuing an Integrated B.Tech program affiliated with Medhavi Skills University.
+  const [userProfile, setUserProfile] = useState(() => {
+    const active = getActiveUser();
+    if (active) return active;
+    return {
+      name: 'Satyam',
+      email: 'satyam@scholr.com',
+      avatar: getImagePath('/images/avatar_user.png'),
+      banner: 'linear-gradient(135deg, #0F172A 0%, #1A8917 100%)',
+      headline: 'AI/ML Enthusiast | Web Developer | Open Source Learner',
+      education: 'QUAD AI School of Technology / Medhavi Skills University',
+      branch: 'Integrated B.Tech in Computer Science (AI/ML)',
+      gradYear: '2028',
+      collegeLocation: 'Ranchi, Jharkhand, India',
+      skills: 'React, Python, DSA, Machine Learning, C++, HTML, CSS, JavaScript, Git, EasyEDA, Tinkercard, Circuit Design',
+      areasOfInterest: 'Robotics & Automation, Artificial Intelligence, Frontend Development, Participating in Hackathon',
+      github: 'https://github.com/satyam',
+      linkedin: 'https://linkedin.com/in/satyam',
+      portfolio: 'https://satyam.dev',
+      about: `Satyam is a Computer Science (AI/ML) student at QUAD AI School of Technology pursuing an Integrated B.Tech program affiliated with Medhavi Skills University.
 
 He is passionate about Robotics, AI/ML, and building real-world tech projects. He enjoy participating in hackathons, solving practical problems, and learning by building innovative solutions under real challenges.
 Over the past few months, He has worked on robotics projects, PCB design, frontend development, and AI-based ideas while actively participating in multiple hackathons .
@@ -123,6 +359,7 @@ Over the past few months, He has worked on robotics projects, PCB design, fronte
  • Published technical and student-focused articles on Medium .
 
 He believe in learning through hands-on experience, teamwork, and continuous experimentation. Always open to collaborating, learning new technologies, and building impactful project.`
+    };
   });
 
   const [homeArticles, setHomeArticles] = useState([
@@ -620,69 +857,104 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
     }
   ]);
 
-  const [profileArticles, setProfileArticles] = useState([
-    {
-      id: 'p1',
-      category: 'AI Insights',
-      author: 'Satyam',
-      date: 'May 12',
-      title: 'The Future of AI Agents: Why Students Should Care',
-      excerpt: 'Autonomous agents are redefining the academic landscape, from research automation to personalized study assistants. We look into the AI tools driving student productivity and breakthroughs.',
-      initialClaps: 2400,
-      comments: 2,
-      commentsList: [...mockComments],
-      image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=500&auto=format&fit=crop',
-      content: [
-        "Autonomous AI agents are set to transform the student experience. Far from being simple text predictors, these agents plan, call APIs, and reason through long-term academic tasks.",
-        "## Personalized Tutors",
-        "Instead of a static textbook, an agent analyzes your homework code, suggests debugging solutions, and tests your understanding with interactive quizzes.",
-        "## Research Automation",
-        "Agents can scour scientific databases, summarize relevant papers, and draft literature review structures, saving students hours of research overhead."
-      ]
-    },
-    {
-      id: 'p2',
-      category: 'Code Academy',
-      author: 'Sarah Miller',
-      date: 'May 10',
-      title: '2024 Web Development Roadmap: From Zero to Full Stack',
-      excerpt: 'Mastering modern web development requires a strategic approach. We break down the absolute essentials of HTML, CSS, JavaScript, React, server architectures, and databases for full mastery.',
-      initialClaps: 1800,
-      comments: 2,
-      commentsList: [...mockComments],
-      image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&auto=format&fit=crop',
-      content: [
-        "Web development moves incredibly fast. To avoid tutorial hell, build a systematic learning list mapping out standard web structures.",
-        "## Phase 1: Semantic HTML & Vanilla CSS",
-        "Master responsive styling, document mapping, flexbox layouts, and grids.",
-        "## Phase 2: JavaScript & DOM Manipulation",
-        "Understand asynchronous promises, fetch API calls, storage mechanics, and event listeners.",
-        "## Phase 3: Frameworks & Deployments",
-        "Learn React lifecycle states, routers, custom hooks, and publish application bundles to hosting solutions."
-      ]
-    },
-    {
-      id: 'p3',
-      category: 'Student Success',
-      author: 'Satyam',
-      date: 'May 8',
-      title: 'How I Landed a FAANG Internship as a Sophomore',
-      excerpt: 'Networking, open-source contributions, and the exact resume template that got me past the screening bots at Google and Stripe. Here is the step-by-step sophomore guide.',
-      initialClaps: 4200,
-      comments: 2,
-      commentsList: [...mockComments],
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&auto=format&fit=crop',
-      content: [
-        "Landing a sophomore internship at FAANG is tough, but far from impossible. If you focus on building a robust portfolio and networking, you can skip the standard application filters.",
-        "## 1. Technical Depth Wins",
-        "Don't build basic calculator apps. Build systems that handle multi-user database entries or automate hardware processes.",
-        "## 2. Resume Keyword Optimization",
-        "Align project bullet points to job description nouns: e.g., 'Implemented responsive React hooks, decreasing loading latency by 20%'.",
-        "## 3. Direct Cold Messaging",
-        "Connect with engineering managers, present your open-source projects, and ask for career advice. Often, they will refer you directly."
-      ]
+  const [profileArticles, setProfileArticles] = useState(() => {
+    const active = getActiveUser();
+    if (active && active.profileArticles) return active.profileArticles;
+    return [
+      {
+        id: 'p1',
+        category: 'AI Insights',
+        author: 'Satyam',
+        date: 'May 12',
+        title: 'The Future of AI Agents: Why Students Should Care',
+        excerpt: 'Autonomous agents are redefining the academic landscape, from research automation to personalized study assistants. We look into the AI tools driving student productivity and breakthroughs.',
+        initialClaps: 2400,
+        comments: 2,
+        commentsList: [...mockComments],
+        image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=500&auto=format&fit=crop',
+        content: [
+          "Autonomous AI agents are set to transform the student experience. Far from being simple text predictors, these agents plan, call APIs, and reason through long-term academic tasks.",
+          "## Personalized Tutors",
+          "Instead of a static textbook, an agent analyzes your homework code, suggests debugging solutions, and tests your understanding with interactive quizzes.",
+          "## Research Automation",
+          "Agents can scour scientific databases, summarize relevant papers, and draft literature review structures, saving students hours of research overhead."
+        ]
+      },
+      {
+        id: 'p2',
+        category: 'Code Academy',
+        author: 'Sarah Miller',
+        date: 'May 10',
+        title: '2024 Web Development Roadmap: From Zero to Full Stack',
+        excerpt: 'Mastering modern web development requires a strategic approach. We break down the absolute essentials of HTML, CSS, JavaScript, React, server architectures, and databases for full mastery.',
+        initialClaps: 1800,
+        comments: 2,
+        commentsList: [...mockComments],
+        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&auto=format&fit=crop',
+        content: [
+          "Web development moves incredibly fast. To avoid tutorial hell, build a systematic learning list mapping out standard web structures.",
+          "## Phase 1: Semantic HTML & Vanilla CSS",
+          "Master responsive styling, document mapping, flexbox layouts, and grids.",
+          "## Phase 2: JavaScript & DOM Manipulation",
+          "Understand asynchronous promises, fetch API calls, storage mechanics, and event listeners.",
+          "## Phase 3: Frameworks & Deployments",
+          "Learn React lifecycle states, routers, custom hooks, and publish application bundles to hosting solutions."
+        ]
+      },
+      {
+        id: 'p3',
+        category: 'Student Success',
+        author: 'Satyam',
+        date: 'May 8',
+        title: 'How I Landed a FAANG Internship as a Sophomore',
+        excerpt: 'Networking, open-source contributions, and the exact resume template that got me past the screening bots at Google and Stripe. Here is the step-by-step sophomore guide.',
+        initialClaps: 4200,
+        comments: 2,
+        commentsList: [...mockComments],
+        image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&auto=format&fit=crop',
+        content: [
+          "Landing a sophomore internship at FAANG is tough, but far from impossible. If you focus on building a robust portfolio and networking, you can skip the standard application filters.",
+          "## 1. Technical Depth Wins",
+          "Don't build basic calculator apps. Build systems that handle multi-user database entries or automate hardware processes.",
+          "## 2. Resume Keyword Optimization",
+          "Align project blueprint points to job description nouns: e.g., 'Implemented responsive React hooks, decreasing loading latency by 20%'.",
+          "## 3. Direct Cold Messaging",
+          "Connect with engineering managers, present your open-source projects, and ask for career advice. Often, they will refer you directly."
+        ]
+      }
+    ];
+  });
+
+  useEffect(() => {
+    if (isLoggedIn && userProfile && userProfile.email) {
+      const updatedUser = {
+        ...userProfile,
+        profileArticles,
+        savedArticles,
+        followingCreators,
+        followers
+      };
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+      // Sync users array
+      const usersRaw = localStorage.getItem('users');
+      if (usersRaw) {
+        try {
+          const users = JSON.parse(usersRaw);
+          const index = users.findIndex(u => u.email.toLowerCase() === userProfile.email.toLowerCase());
+          if (index !== -1) {
+            users[index] = {
+              ...users[index],
+              ...updatedUser
+            };
+            localStorage.setItem('users', JSON.stringify(users));
+          }
+        } catch (err) {
+          console.error("Error syncing to users array:", err);
+        }
+      }
     }
-  ]);
+  }, [isLoggedIn, userProfile, profileArticles, savedArticles, followingCreators, followers]);
 
   const toggleSaveArticle = (article) => {
     setSavedArticles(prev => {
@@ -770,6 +1042,12 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
 
   const unfollowCreator = (id) => {
     setFollowingCreators(prev => prev.filter(c => c.id !== id));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser');
+    setIsLoggedIn(false);
+    setActiveTab('Home');
   };
 
   // Maps author name dynamically so edits propagate immediately everywhere
@@ -1084,75 +1362,89 @@ He believe in learning through hands-on experience, teamwork, and continuous exp
         )}
       </AnimatePresence>
 
-      <motion.div
-        className="app-container"
-        initial={{ opacity: 0 }}
-        animate={!showIntro ? { opacity: 1 } : {}}
-        transition={{ duration: 0.3 }}
-      >
-        <Header 
-          activeTab={activeTab} 
-          setActiveTab={(tab) => {
-            setSelectedArticle(null);
-            setViewedProfileAuthor(null);
-            setActiveTab(tab);
-          }} 
-          userProfile={userProfile}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
+      {!showIntro && !isLoggedIn ? (
+        <AuthView 
+          onLoginSuccess={(user) => {
+            setIsLoggedIn(true);
+            setUserProfile(user);
+            setProfileArticles(user.profileArticles || []);
+            setSavedArticles(user.savedArticles || []);
+            setFollowingCreators(user.followingCreators || []);
+            setFollowers(user.followers || []);
+          }}
         />
-        
-        <main className="main-content" style={{ gridTemplateColumns: gridColumns }}>
-          {(activeTab !== 'Home' || selectedArticle) && activeTab !== 'Write' && (
-            <SidebarLeft 
-              activeTab={activeTab} 
-              setActiveTab={(tab) => {
-                setSelectedArticle(null);
-                setViewedProfileAuthor(null);
-                setActiveTab(tab);
-              }} 
-              onEditProfileClick={() => setIsEditProfileOpen(true)}
-              followingCreatorsCount={followingCreators.length}
-              followersCount={followers.length}
-              savedArticlesCount={savedArticles.length}
-            />
-          )}
+      ) : (
+        <motion.div
+          className="app-container"
+          initial={{ opacity: 0 }}
+          animate={!showIntro ? { opacity: 1 } : {}}
+          transition={{ duration: 0.3 }}
+        >
+          <Header 
+            activeTab={activeTab} 
+            setActiveTab={(tab) => {
+              setSelectedArticle(null);
+              setViewedProfileAuthor(null);
+              setActiveTab(tab);
+            }} 
+            userProfile={userProfile}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            onLogout={handleLogout}
+          />
           
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab + (selectedArticle ? `-detail-${selectedArticle.id}` : '')}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.25 }}
-              >
-                {renderFeed()}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <main className="main-content" style={{ gridTemplateColumns: gridColumns }}>
+            {(activeTab !== 'Home' || selectedArticle) && activeTab !== 'Write' && (
+              <SidebarLeft 
+                activeTab={activeTab} 
+                setActiveTab={(tab) => {
+                  setSelectedArticle(null);
+                  setViewedProfileAuthor(null);
+                  setActiveTab(tab);
+                }} 
+                onEditProfileClick={() => setIsEditProfileOpen(true)}
+                followingCreatorsCount={followingCreators.length}
+                followersCount={followers.length}
+                savedArticlesCount={savedArticles.length}
+              />
+            )}
+            
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab + (selectedArticle ? `-detail-${selectedArticle.id}` : '')}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  {renderFeed()}
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
-          {activeTab === 'Home' && !selectedArticle && (
-            <SidebarRight 
-              activeTab={activeTab} 
-              selectedTopic={selectedTopic} 
-              setSelectedTopic={setSelectedTopic} 
-            />
-          )}
-        </main>
+            {activeTab === 'Home' && !selectedArticle && (
+              <SidebarRight 
+                activeTab={activeTab} 
+                selectedTopic={selectedTopic} 
+                setSelectedTopic={setSelectedTopic} 
+              />
+            )}
+          </main>
 
-        {/* Edit Profile Modal Dialog */}
-        <AnimatePresence>
-          {isEditProfileOpen && (
-            <EditProfileModal 
-              isOpen={isEditProfileOpen}
-              onClose={() => setIsEditProfileOpen(false)}
-              userProfile={userProfile}
-              onSave={handleSaveProfile}
-            />
-          )}
-        </AnimatePresence>
-      </motion.div>
+          {/* Edit Profile Modal Dialog */}
+          <AnimatePresence>
+            {isEditProfileOpen && (
+              <EditProfileModal 
+                isOpen={isEditProfileOpen}
+                onClose={() => setIsEditProfileOpen(false)}
+                userProfile={userProfile}
+                onSave={handleSaveProfile}
+              />
+            )}
+          </AnimatePresence>
+        </motion.div>
+      )}
     </>
   );
 }

@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Send } from 'lucide-react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { getImagePath } from '../utils/paths';
 
@@ -66,7 +65,7 @@ export default function CommentsSection({ articleId, commentsList = [], onAddCom
         ))}
 
         {commentsList.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '16px', color: '#64748b', fontSize: '13.5px' }}>
+          <div className="comments-empty-message">
             No responses yet. Be the first to share your thoughts!
           </div>
         )}

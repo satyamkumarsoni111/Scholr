@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import ArticleCard from './ArticleCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getImagePath } from '../utils/paths';
@@ -8,12 +8,11 @@ import {
   GraduationCap, 
   Cpu, 
   MapPin, 
-  Briefcase, 
   Calendar, 
-  Globe, 
   Tag,
   Pencil
 } from 'lucide-react';
+import './ProfileFeed.css';
 
 const GithubIcon = ({ size = 18 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -29,7 +28,7 @@ const LinkedinIcon = ({ size = 18 }) => (
   </svg>
 );
 
-export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEditProfileClick, savedArticles, toggleSave, onTitleClick, onAddComment, currentUser, onAuthorClick }) {
+export default function ProfileFeed({ articles, userProfile, onSaveProfile, savedArticles, toggleSave, onTitleClick, onAddComment, currentUser }) {
   const [profileTab, setProfileTab] = useState('My Articles');
   const [isHoveringBanner, setIsHoveringBanner] = useState(false);
   const [isHoveringAvatar, setIsHoveringAvatar] = useState(false);
@@ -78,23 +77,10 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
   const interestsList = getPillsList(userProfile.areasOfInterest || userProfile.interests);
 
   return (
-    <div style={{
-      maxWidth: '780px',
-      margin: '0 auto',
-      padding: '24px 20px 48px 20px',
-      fontFamily: '"Inter", sans-serif'
-    }}>
+    <div className="profile-feed-container">
       
       {/* Profile Sections Tab Header */}
-      <nav 
-        className="feed-tabs-container" 
-        style={{ 
-          marginBottom: '28px',
-          borderBottom: '1px solid #e2e8f0',
-          display: 'flex',
-          gap: '24px'
-        }}
-      >
+      <nav className="feed-tabs-container profile-tabs-header">
         {[
           { name: 'My Articles', icon: BookOpen },
           { name: 'About', icon: User }
@@ -104,37 +90,16 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
           return (
             <button
               key={tab.name}
-              className={`feed-tab ${isActive ? 'active' : ''}`}
+              className={`feed-tab profile-tab-button ${isActive ? 'active' : ''}`}
               onClick={() => setProfileTab(tab.name)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                paddingBottom: '12px',
-                fontSize: '15px',
-                fontWeight: isActive ? '700' : '500',
-                color: isActive ? '#0f172a' : '#64748b',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                position: 'relative'
-              }}
             >
               <Icon size={16} />
               <span>{tab.name}</span>
               
               {isActive && (
                 <motion.div 
-                  className="active-tab-indicator" 
+                  className="active-tab-indicator profile-tab-underline" 
                   layoutId="activeProfileViewUnderline"
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '2px',
-                    backgroundColor: 'var(--primary-green)'
-                  }}
                   transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                 />
               )}
@@ -165,7 +130,7 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
                 />
               ))}
               {articles.length === 0 && (
-                <div style={{ padding: '40px 20px', textAlign: 'center', color: '#64748b', fontSize: '14.5px' }}>
+                <div className="profile-articles-empty">
                   No articles published yet.
                 </div>
               )}
@@ -178,37 +143,25 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.25 }}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '24px',
-              color: '#334155'
-            }}
+            className="profile-about-tab-container"
           >
             
             {/* LinkedIn-Style Profile Header Block */}
-            <div style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: '16px',
-              overflow: 'hidden',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
-              position: 'relative'
-            }}>
+            <div className="profile-card-container">
               
               {/* Hidden File Inputs for direct uploading of cover banner and profile photo */}
               <input 
                 type="file" 
                 accept="image/*" 
                 ref={avatarInputRef} 
-                style={{ display: 'none' }} 
+                className="profile-hidden-file-input" 
                 onChange={handleAvatarFileChange} 
               />
               <input 
                 type="file" 
                 accept="image/*" 
                 ref={bannerInputRef} 
-                style={{ display: 'none' }} 
+                className="profile-hidden-file-input" 
                 onChange={handleBannerFileChange} 
               />
 
@@ -217,15 +170,11 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
                 onMouseEnter={isOwnProfile ? () => setIsHoveringBanner(true) : undefined}
                 onMouseLeave={isOwnProfile ? () => setIsHoveringBanner(false) : undefined}
                 onClick={isOwnProfile ? () => bannerInputRef.current.click() : undefined}
+                className={`profile-cover-banner ${isOwnProfile ? 'own-profile' : ''}`}
                 style={{
-                  height: '210px',
-                  background: userProfile.banner?.startsWith('linear-gradient') 
-                    ? userProfile.banner 
-                    : `url(${userProfile.banner || 'linear-gradient(135deg, #0F172A 0%, #1A8917 100%)'})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  position: 'relative',
-                  cursor: isOwnProfile ? 'pointer' : 'default'
+                  background: userProfile.banner
+                    ? (userProfile.banner.startsWith('linear-gradient') ? userProfile.banner : `url(${userProfile.banner})`)
+                    : 'linear-gradient(135deg, #0F172A 0%, #1A8917 100%)'
                 }}
               >
                 {/* Pencil Overlay */}
@@ -234,29 +183,9 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isHoveringBanner ? 1 : 0 }}
                     transition={{ duration: 0.2 }}
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      pointerEvents: 'none'
-                    }}
+                    className="profile-pencil-overlay"
                   >
-                    <div style={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255, 255, 255, 0.3)',
-                      borderRadius: '50%',
-                      width: '46px',
-                      height: '46px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#ffffff',
-                      boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.15)'
-                    }}>
+                    <div className="profile-pencil-circle">
                       <Pencil size={20} />
                     </div>
                   </motion.div>
@@ -264,33 +193,18 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
               </div>
 
               {/* Profile Photo Overlapping Cover (Clean display with hover pencil shortcut) */}
-              <div style={{ padding: '0 28px 28px 28px', position: 'relative' }}>
+              <div className="profile-avatar-row">
                 
                 <div 
                   onMouseEnter={isOwnProfile ? () => setIsHoveringAvatar(true) : undefined}
                   onMouseLeave={isOwnProfile ? () => setIsHoveringAvatar(false) : undefined}
                   onClick={isOwnProfile ? () => avatarInputRef.current.click() : undefined}
-                  style={{
-                    width: '136px',
-                    height: '136px',
-                    marginTop: '-76px',
-                    borderRadius: '50%',
-                    border: '5px solid #ffffff',
-                    boxShadow: '0 8px 20px rgba(0,0,0,0.08)',
-                    overflow: 'hidden',
-                    position: 'relative',
-                    backgroundColor: '#ffffff',
-                    cursor: isOwnProfile ? 'pointer' : 'default'
-                  }}
+                  className={`profile-avatar-wrapper ${isOwnProfile ? 'own-profile' : ''}`}
                 >
                   <img 
                     src={userProfile.avatar || getImagePath('/images/avatar_user.png')} 
                     alt={userProfile.name}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover'
-                    }}
+                    className="profile-avatar-img"
                   />
                   {/* Pencil Overlay */}
                   {isOwnProfile && (
@@ -298,28 +212,9 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
                       initial={{ opacity: 0 }}
                       animate={{ opacity: isHoveringAvatar ? 1 : 0 }}
                       transition={{ duration: 0.2 }}
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        pointerEvents: 'none'
-                      }}
+                      className="profile-avatar-pencil-overlay"
                     >
-                      <div style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.25)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.3)',
-                        borderRadius: '50%',
-                        width: '36px',
-                        height: '36px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#ffffff'
-                      }}>
+                      <div className="profile-avatar-pencil-circle">
                         <Pencil size={16} />
                       </div>
                     </motion.div>
@@ -327,208 +222,130 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
                 </div>
 
                 {/* User Information & Header Details Area in LinkedIn Visual Order */}
-                <div style={{ 
-                  marginTop: '16px', 
-                  display: 'flex', 
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  flexWrap: 'wrap',
-                  gap: '20px'
-                }}>
-                  <div style={{ flex: '1', minWidth: '280px' }}>
+                <div className="profile-details-wrapper">
+                  <div className="profile-main-info">
                     
                     {/* User Name */}
-                    <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#0f172a', margin: '0 0 4px 0', letterSpacing: '-0.5px' }}>
+                    <h2 className="profile-name">
                       {userProfile.name}
                     </h2>
                     
                     {/* 1/ Professional headline is shown just below name */}
-                    <p style={{ fontSize: '15.5px', color: '#475569', fontWeight: '600', margin: '0 0 10px 0', lineHeight: '1.4' }}>
-                      {userProfile.headline}
-                    </p>
+                    {userProfile.headline && (
+                      <p className="profile-headline">
+                        {userProfile.headline}
+                      </p>
+                    )}
 
                     {/* 2/ Academics details is just below the professional headline */}
-                    <div style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: '8px', 
-                      fontSize: '14px', 
-                      color: '#334155',
-                      fontWeight: '500',
-                      margin: '0 0 8px 0'
-                    }}>
-                      <GraduationCap size={16} style={{ color: 'var(--primary-green)' }} />
-                      <span>{userProfile.branch} at {userProfile.education}</span>
-                    </div>
+                    {(userProfile.branch || userProfile.education) && (
+                      <div className="profile-academic-line">
+                        <GraduationCap size={16} />
+                        <span>
+                          {userProfile.branch && userProfile.education 
+                            ? `${userProfile.branch} at ${userProfile.education}` 
+                            : (userProfile.branch || userProfile.education)}
+                        </span>
+                      </div>
+                    )}
 
                     {/* 3/ Add location of user college and display as it is just below acadamics details */}
-                    <div style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: '8px', 
-                      fontSize: '13.5px', 
-                      color: '#64748b',
-                      fontWeight: '500',
-                      margin: '0 0 4px 0'
-                    }}>
-                      <MapPin size={16} style={{ color: '#ef4444' }} />
-                      <span>{userProfile.collegeLocation || 'Ranchi, Jharkhand, India'}</span>
-                    </div>
+                    {userProfile.collegeLocation && (
+                      <div className="profile-location-line">
+                        <MapPin size={16} />
+                        <span>{userProfile.collegeLocation}</span>
+                      </div>
+                    )}
 
                   </div>
 
                   {/* Social Connections */}
-                  <div style={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    gap: '10px',
-                    alignItems: 'flex-start',
-                    minWidth: '160px' 
-                  }}>
-                    <span style={{ fontSize: '11px', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                      Connections
-                    </span>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                      {userProfile.github && (
-                        <div 
-                          style={{ 
-                            color: '#475569', 
-                            backgroundColor: '#f1f5f9', 
-                            padding: '8px', 
-                            borderRadius: '8px', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center',
-                            border: '1px solid #e2e8f0',
-                            cursor: 'default'
-                          }} 
-                          title="GitHub Profile"
-                        >
-                          <GithubIcon size={18} />
-                        </div>
+                  {(userProfile.github || userProfile.linkedin || !isOwnProfile) && (
+                    <div className="profile-sidebar-connections">
+                      {(userProfile.github || userProfile.linkedin) && (
+                        <>
+                          <span className="profile-connections-title">
+                            Connections
+                          </span>
+                          <div className="profile-connections-row">
+                            {userProfile.github && (
+                              <div 
+                                className="profile-connection-icon github"
+                                title="GitHub Profile"
+                              >
+                                <GithubIcon size={18} />
+                              </div>
+                            )}
+                            
+                            {userProfile.linkedin && (
+                              <div 
+                                className="profile-connection-icon linkedin"
+                                title="LinkedIn Profile"
+                              >
+                                <LinkedinIcon size={18} />
+                              </div>
+                            )}
+                          </div>
+                        </>
                       )}
-                      
-                      {userProfile.linkedin && (
-                        <div 
-                          style={{ 
-                            color: '#0077b5', 
-                            backgroundColor: '#f0f9ff', 
-                            padding: '8px', 
-                            borderRadius: '8px', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center',
-                            border: '1px solid #bae6fd',
-                            cursor: 'default'
-                          }} 
-                          title="LinkedIn Profile"
+
+                      {/* Follow button for external authors */}
+                      {!isOwnProfile && (
+                        <motion.button
+                          onClick={() => setIsFollowing(!isFollowing)}
+                          className={`profile-follow-btn ${isFollowing ? 'following' : ''}`}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                         >
-                          <LinkedinIcon size={18} />
-                        </div>
+                          {isFollowing ? 'Following' : 'Follow'}
+                        </motion.button>
                       )}
                     </div>
-
-                    {/* Follow button for external authors */}
-                    {!isOwnProfile && (
-                      <motion.button
-                        onClick={() => setIsFollowing(!isFollowing)}
-                        style={{
-                          backgroundColor: isFollowing ? '#f1f5f9' : 'var(--primary-green)',
-                          color: isFollowing ? '#0f172a' : '#ffffff',
-                          border: isFollowing ? '1px solid #e2e8f0' : 'none',
-                          borderRadius: '9999px',
-                          padding: '8px 20px',
-                          fontSize: '13.5px',
-                          fontWeight: '700',
-                          cursor: 'pointer',
-                          width: '100%',
-                          textAlign: 'center',
-                          marginTop: '6px'
-                        }}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        {isFollowing ? 'Following' : 'Follow'}
-                      </motion.button>
-                    )}
-                  </div>
+                  )}
                 </div>
 
               </div>
             </div>
 
             {/* About Card */}
-            <div style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: '16px',
-              padding: '24px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <User size={18} style={{ color: 'var(--primary-green)' }} />
-                <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a', margin: 0, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
-                  About Me
-                </h3>
+            {userProfile.about && (
+              <div className="profile-about-card">
+                <div className="profile-card-header">
+                  <User size={18} />
+                  <h3 className="profile-card-title">
+                    About Me
+                  </h3>
+                </div>
+                
+                <div className="profile-about-text">
+                  {userProfile.about}
+                </div>
               </div>
-              
-              <div style={{ 
-                fontSize: '14.5px', 
-                color: '#475569', 
-                whiteSpace: 'pre-line',
-                lineHeight: '1.6' 
-              }}>
-                {userProfile.about ? userProfile.about : (
-                  <span style={{ color: '#94a3b8', fontStyle: 'italic' }}>
-                    Tell students about your learning journey, interests, and goals.
-                  </span>
-                )}
-              </div>
-            </div>
+            )}
 
             {/* Academic Information Card */}
             {(userProfile.education || userProfile.branch) && (
-              <div style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '16px',
-                padding: '24px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <GraduationCap size={18} style={{ color: 'var(--primary-green)' }} />
-                  <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a', margin: 0, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+              <div className="profile-education-card">
+                <div className="profile-card-header">
+                  <GraduationCap size={18} />
+                  <h3 className="profile-card-title">
                     Education & Credentials
                   </h3>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                  <div style={{ 
-                    backgroundColor: '#f1f5f9', 
-                    padding: '12px', 
-                    borderRadius: '12px', 
-                    color: 'var(--primary-green)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
+                <div className="profile-education-content-row">
+                  <div className="profile-education-icon-wrapper">
                     <GraduationCap size={24} />
                   </div>
                   
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '15px', fontWeight: '700', color: '#0f172a' }}>
+                  <div className="profile-education-details">
+                    <span className="profile-education-name">
                       {userProfile.education}
                     </span>
-                    <span style={{ fontSize: '13.5px', color: '#475569', fontWeight: '500' }}>
+                    <span className="profile-education-degree">
                       {userProfile.branch || 'Degree Program in Engineering'}
                     </span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#94a3b8', marginTop: '4px' }}>
+                    <div className="profile-education-year-row">
                       <Calendar size={13} />
                       <span>Graduation Year: {userProfile.gradYear || '2028'}</span>
                     </div>
@@ -539,37 +356,19 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
 
             {/* Technical Skills Card */}
             {skillsList.length > 0 && (
-              <div style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '16px',
-                padding: '24px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '14px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Cpu size={18} style={{ color: 'var(--primary-green)' }} />
-                  <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a', margin: 0, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+              <div className="profile-skills-card">
+                <div className="profile-card-header">
+                  <Cpu size={18} />
+                  <h3 className="profile-card-title">
                     Top Technical Skills
                   </h3>
                 </div>
                 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <div className="profile-skills-list">
                   {skillsList.map((skill, index) => (
                     <motion.span 
                       key={index} 
-                      style={{
-                        fontSize: '12.5px',
-                        fontWeight: '600',
-                        color: 'var(--primary-green)',
-                        backgroundColor: 'var(--primary-green-light)',
-                        padding: '6px 14px',
-                        borderRadius: '8px',
-                        border: '1px solid #d1fae5',
-                        cursor: 'default'
-                      }}
+                      className="profile-skill-badge"
                       whileHover={{ scale: 1.05, backgroundColor: 'var(--primary-green)', color: '#ffffff', borderColor: 'var(--primary-green)' }}
                     >
                       {skill}
@@ -581,37 +380,19 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
 
             {/* Interests & Topics Card */}
             {interestsList.length > 0 && (
-              <div style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '16px',
-                padding: '24px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '14px'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Tag size={18} style={{ color: '#0284c7' }} />
-                  <h3 style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a', margin: 0, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+              <div className="profile-interests-card">
+                <div className="profile-card-header">
+                  <Tag size={18} />
+                  <h3 className="profile-card-title">
                     Interests & Topics
                   </h3>
                 </div>
                 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <div className="profile-skills-list">
                   {interestsList.map((interest, index) => (
                     <motion.span 
                       key={index} 
-                      style={{
-                        fontSize: '12.5px',
-                        fontWeight: '600',
-                        color: '#0284c7',
-                        backgroundColor: '#e0f2fe',
-                        padding: '6px 14px',
-                        borderRadius: '8px',
-                        border: '1px solid #bae6fd',
-                        cursor: 'default'
-                      }}
+                      className="profile-interest-badge"
                       whileHover={{ scale: 1.05, backgroundColor: '#0284c7', color: '#ffffff', borderColor: '#0284c7' }}
                     >
                       {interest}
@@ -627,3 +408,4 @@ export default function ProfileFeed({ articles, userProfile, onSaveProfile, onEd
     </div>
   );
 }
+
